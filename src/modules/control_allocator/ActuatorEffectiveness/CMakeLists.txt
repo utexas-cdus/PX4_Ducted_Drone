@@ -62,6 +62,13 @@ px4_add_library(ActuatorEffectiveness
 	ActuatorEffectivenessTailsitterVTOL.hpp
 	ActuatorEffectivenessRoverAckermann.hpp
 	ActuatorEffectivenessRoverAckermann.cpp
+	# ADDING IN CUSTOM CPP AND HPP FILES FOR DUCTED DRONE CONFIGURATION 
+	ActuatorEffectivenessDuctedDroneVTOL.cpp
+	ActuatorEffectivenessDuctedDroneVTOL.hpp
+	ActuatorEffectivenessRotorsDucted.cpp
+	ActuatorEffectivenessRotorsDucted.hpp
+	ActuatorEffectivenessControlSurfacesDucted.cpp
+	ActuatorEffectivenessControlSurfacesDucted.hpp
 )
 
 target_compile_options(ActuatorEffectiveness PRIVATE ${MAX_CUSTOM_OPT_LEVEL})

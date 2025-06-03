@@ -30,6 +30,10 @@ parameters:
                 10: Helicopter (tail ESC)
                 11: Helicopter (tail Servo)
                 12: Helicopter (Coaxial)
+                # BEGIN CUSTOM 
+                13: Ducted Drone
+                # END CUSTOM 
+
             default: 0
 
         CA_METHOD:
@@ -235,6 +239,61 @@ parameters:
             num_instances: *max_num_mc_motors
             instance_start: 0
             default: 0
+        # CUSTOM DUCTED DRONE PARAMS FOR ROTORS
+        CA_RT${i}_TRQ_R:
+            description:
+                short: Rotor ${i} Roll torque contribution
+            type: float
+            decimal: 2
+            num_instances: *max_num_mc_motors
+            instance_start: 0
+            default: 0.0
+
+        CA_RT${i}_TRQ_P:
+            description:
+                short: Rotor ${i} Pitch torque contribution
+            type: float
+            decimal: 2
+            num_instances: *max_num_mc_motors
+            instance_start: 0
+            default: 0.0
+
+        CA_RT${i}_TRQ_Y:
+            description:
+                short: Rotor ${i} Yaw torque contribution
+            type: float
+            decimal: 2
+            num_instances: *max_num_mc_motors
+            instance_start: 0
+            default: 0.0
+
+        CA_RT${i}_THRUST_X:
+            description:
+                short: Rotor ${i} X thrust contribution
+            type: float
+            decimal: 2
+            num_instances: *max_num_mc_motors
+            instance_start: 0
+            default: 0.0
+
+        CA_RT${i}_THRUST_Y:
+            description:
+                short: Rotor ${i} Y thrust contribution
+            type: float
+            decimal: 2
+            num_instances: *max_num_mc_motors
+            instance_start: 0
+            default: 0.0
+
+        CA_RT${i}_THRUST_Z:
+            description:
+                short: Rotor ${i} Z thrust contribution
+            type: float
+            decimal: 2
+            num_instances: *max_num_mc_motors
+            instance_start: 0
+            default: 0.0
+        # END CUSTOM DUCTED DRONE PARAMS
 
         # control surfaces
         CA_SV_CS_COUNT:
@@ -540,6 +599,38 @@ parameters:
                 0: Ignore
                 1: Remove first failed motor from effectiveness
             default: 0
+
+        # BEGIN CUSTOM DUCTED DRONE PARAMS  
+        CA_SV_CS${i}_THRUST_X:
+          description:
+            short: Control Surface ${i} X thrust contribution
+            long: Contribution of this control surface to X thrust component
+          type: float
+          decimal: 2
+          num_instances: *max_num_servos
+          instance_start: 0
+          default: 0.0
+
+        CA_SV_CS${i}_THRUST_Y:
+          description:
+            short: Control Surface ${i} Y thrust contribution
+            long: Contribution of this control surface to Y thrust component
+          type: float
+          decimal: 2
+          num_instances: *max_num_servos
+          instance_start: 0
+          default: 0.0
+
+        CA_SV_CS${i}_THRUST_Z:
+          description:
+            short: Control Surface ${i} Z thrust contribution
+            long: Contribution of this control surface to Z thrust component
+          type: float
+          decimal: 2
+          num_instances: *max_num_servos
+          instance_start: 0
+          default: 0.0
+          # *** END-CUSTOM ***
 
 # Mixer
 mixer:
@@ -1140,3 +1231,53 @@ mixer:
                     parameters:
                       - label: 'Throttle spoolup time'
                         name: COM_SPOOLUP_TIME
+            13:  # Ducted Drone
+            title: 'Ducted Drone'
+            actuators:
+            - actuator_type: 'motor'
+              group_label: 'Motors'
+              count: 'CA_ROTOR_COUNT'
+              per_item_parameters:
+                standard:
+                  position: [ 'CA_ROTOR${i}_PX', 'CA_ROTOR${i}_PY', 'CA_ROTOR${i}_PZ' ]
+                extra:
+                  - name: 'CA_ROTOR${i}_KM'
+                    label: 'Direction CCW'
+                    function: 'spin-dir'
+                    show_as: 'true-if-positive'
+                  - name: 'CA_RT${i}_TRQ_R'
+                    label: 'Roll Torque'
+                  - name: 'CA_RT${i}_TRQ_P'
+                    label: 'Pitch Torque'
+                  - name: 'CA_RT${i}_TRQ_Y'
+                    label: 'Yaw Torque'
+                  - name: 'CA_RT${i}_THRUST_X'
+                    label: 'Thrust X'
+                  - name: 'CA_RT${i}_THRUST_Y'
+                    label: 'Thrust Y'
+                  - name: 'CA_RT${i}_THRUST_Z'
+                    label: 'Thrust Z'
+
+            - actuator_type: 'servo'
+              group_label: 'Control Surfaces'
+              count: 'CA_SV_CS_COUNT'
+              item_label_prefix: 'Surface ${i}'
+              per_item_parameters:
+                extra:
+                  - name: 'CA_SV_CS${i}_TYPE'
+                    label: 'Type'
+                  - name: 'CA_SV_CS${i}_TRQ_R'
+                    label: 'Roll Scale'
+                  - name: 'CA_SV_CS${i}_TRQ_P'
+                    label: 'Pitch Scale'
+                  - name: 'CA_SV_CS${i}_TRQ_Y'
+                    label: 'Yaw Scale'
+                  - name: 'CA_SV_CS${i}_TRIM'
+                    label: 'Trim'
+                  - name: 'CA_SV_CS${i}_THRUST_X'
+                    label: 'Thrust X'
+                  - name: 'CA_SV_CS${i}_THRUST_Y'
+                    label: 'Thrust Y'
+                  - name: 'CA_SV_CS${i}_THRUST_Z'
+                    label: 'Thrust Z'
+            # *** END-CUSTOM ***

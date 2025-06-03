@@ -45,6 +45,7 @@ px4_add_module(
 	SRCS
 		ControlAllocator.cpp
 		ControlAllocator.hpp
+		ActuatorEffectivenessDuctedDroneVTOL.params
 	MODULE_CONFIG
 		module.yaml
 	DEPENDS
