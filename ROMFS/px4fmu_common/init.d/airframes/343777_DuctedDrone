@@ -1,0 +1,89 @@
+#!/bin/sh
+#
+# @name Generic Quadplane VTOL
+#
+# @type Standard VTOL
+# @class VTOL
+#
+# @maintainer
+#
+# @output MAIN1 motor 1
+# @output MAIN2 motor 2
+# @output MAIN3 motor 3
+# @output MAIN4 motor 4
+# @output AUX1 Aileron 1
+# @output AUX2 Aileron 2
+# @output AUX3 Elevator
+# @output AUX4 Rudder
+# @output AUX5 Throttle
+#
+# @board px4_fmu-v2 exclude
+# @board bitcraze_crazyflie exclude
+# @board holybro_kakutef7 exclude
+#
+
+. ${R}etc/init.d/rc.vtol_defaults
+# Set the Airframe type - This determines the Actuator Effectiveness Matrix and CA Method used 
+param set-default CA_AIRFRAME 13 # Custom Type of
+param set-default CA_METHOD 1
+# Add in Parameters for the Rotors 
+# Below Params are not used in this configuration 
+# param set-default CA_ROTOR_COUNT 2
+# param set-default CA_ROTOR0_PX 0.00
+# param set-default CA_ROTOR0_PY 0.00
+# param set-default CA_ROTOR0_PZ 0.00
+# param set-default CA_ROTOR0_CT 6.5
+# param set-default CA_ROTOR0_KM 0.02
+
+# param set-default CA_ROTOR1_PX 0.00
+# param set-default CA_ROTOR1_PY 0.00
+# param set-default CA_ROTOR1_PZ 0.00
+# param set-default CA_ROTOR1_CT 6.5
+# param set-default CA_ROTOR1_KM 0.02
+
+# Rotor Params
+param set-default CA_RT0_TRQ_R: 0.00
+param set-default CA_RT0_TRQ_P: 0.00
+param set-default CA_RT0_TRQ_Y: 0.00 
+param set-default CA_RT0_TX: 0.00
+param set-default CA_RT0_TY: 0.00
+param set-default CA_RT0_TZ: 0.00
+
+param set-default CA_RT1_TRQ_R: 0.00
+param set-default CA_RT1_TRQ_P: 0.00
+param set-default CA_RT1_TRQ_Y: 0.00 
+param set-default CA_RT1_TX: 0.00
+param set-default CA_RT1_TY: 0.00
+param set-default CA_RT1_TZ: 0.00
+
+# Servo Params 
+param set-default CA_SV_CS_COUNT 2
+param set-default CA_SV_CS0_TYPE 1
+param set-default CA_SV_CS0_TRQ_R 0.00
+param set-default CA_SV_CS0_TRQ_P 0.00
+param set-default CA_SV_CS0_TRQ_Y 0.00
+param set-default CA_SV_CS0_TX 0.00
+param set-default CA_SV_CS0_TY 0.00
+param set-default CA_SV_CS0_TZ 0.00
+
+param set-default CA_SV_CS1_TYPE 2
+param set-default CA_SV_CS1_TRQ_R 0.00
+param set-default CA_SV_CS1_TRQ_P 0.00
+param set-default CA_SV_CS1_TRQ_Y 0.00
+param set-default CA_SV_CS1_TX 0.00
+param set-default CA_SV_CS1_TY 0.00
+param set-default CA_SV_CS1_TZ 0.00
+
+param set-default PWM_AUX_DIS5 950
+
+param set-default VT_TYPE 2
+param set-default VT_MOT_ID 1234
+param set-default VT_FW_MOT_OFFID 1234
+
+param set-default MAV_TYPE 22
+
+set MIXER quad_x
+set MIXER_AUX vtol_AAERT
+
+set PWM_OUT 1234
+
