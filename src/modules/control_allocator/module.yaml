@@ -267,7 +267,7 @@ parameters:
             instance_start: 0
             default: 0.0
 
-        CA_RT${i}_THRUST_X:
+        CA_RT${i}_TX:
             description:
                 short: Rotor ${i} X thrust contribution
             type: float
@@ -276,7 +276,7 @@ parameters:
             instance_start: 0
             default: 0.0
 
-        CA_RT${i}_THRUST_Y:
+        CA_RT${i}_TY:
             description:
                 short: Rotor ${i} Y thrust contribution
             type: float
@@ -285,7 +285,7 @@ parameters:
             instance_start: 0
             default: 0.0
 
-        CA_RT${i}_THRUST_Z:
+        CA_RT${i}_TZ:
             description:
                 short: Rotor ${i} Z thrust contribution
             type: float
@@ -601,7 +601,7 @@ parameters:
             default: 0
 
         # BEGIN CUSTOM DUCTED DRONE PARAMS  
-        CA_SV_CS${i}_THRUST_X:
+        CA_SV_CS${i}_TX:
           description:
             short: Control Surface ${i} X thrust contribution
             long: Contribution of this control surface to X thrust component
@@ -611,7 +611,7 @@ parameters:
           instance_start: 0
           default: 0.0
 
-        CA_SV_CS${i}_THRUST_Y:
+        CA_SV_CS${i}_TY:
           description:
             short: Control Surface ${i} Y thrust contribution
             long: Contribution of this control surface to Y thrust component
@@ -621,7 +621,7 @@ parameters:
           instance_start: 0
           default: 0.0
 
-        CA_SV_CS${i}_THRUST_Z:
+        CA_SV_CS${i}_TZ:
           description:
             short: Control Surface ${i} Z thrust contribution
             long: Contribution of this control surface to Z thrust component
@@ -1232,52 +1232,52 @@ mixer:
                       - label: 'Throttle spoolup time'
                         name: COM_SPOOLUP_TIME
             13:  # Ducted Drone
-            title: 'Ducted Drone'
-            actuators:
-            - actuator_type: 'motor'
-              group_label: 'Motors'
-              count: 'CA_ROTOR_COUNT'
-              per_item_parameters:
-                standard:
-                  position: [ 'CA_ROTOR${i}_PX', 'CA_ROTOR${i}_PY', 'CA_ROTOR${i}_PZ' ]
-                extra:
-                  - name: 'CA_ROTOR${i}_KM'
-                    label: 'Direction CCW'
-                    function: 'spin-dir'
-                    show_as: 'true-if-positive'
-                  - name: 'CA_RT${i}_TRQ_R'
-                    label: 'Roll Torque'
-                  - name: 'CA_RT${i}_TRQ_P'
-                    label: 'Pitch Torque'
-                  - name: 'CA_RT${i}_TRQ_Y'
-                    label: 'Yaw Torque'
-                  - name: 'CA_RT${i}_THRUST_X'
-                    label: 'Thrust X'
-                  - name: 'CA_RT${i}_THRUST_Y'
-                    label: 'Thrust Y'
-                  - name: 'CA_RT${i}_THRUST_Z'
-                    label: 'Thrust Z'
+              title: 'Ducted Drone'
+              actuators:
+                - actuator_type: 'motor'
+                  group_label: 'Motors'
+                  count: 'CA_ROTOR_COUNT'
+                  per_item_parameters:
+                    standard:
+                      position: [ 'CA_ROTOR${i}_PX', 'CA_ROTOR${i}_PY', 'CA_ROTOR${i}_PZ' ]
+                    extra:
+                      - name: 'CA_ROTOR${i}_KM'
+                        label: 'Direction CCW'
+                        function: 'spin-dir'
+                        show_as: 'true-if-positive'
+                      - name: 'CA_RT${i}_TRQ_R'
+                        label: 'Roll Torque'
+                      - name: 'CA_RT${i}_TRQ_P'
+                        label: 'Pitch Torque'
+                      - name: 'CA_RT${i}_TRQ_Y'
+                        label: 'Yaw Torque'
+                      - name: 'CA_RT${i}_TX'
+                        label: 'Thrust X'
+                      - name: 'CA_RT${i}_TY'
+                        label: 'Thrust Y'
+                      - name: 'CA_RT${i}_TZ'
+                        label: 'Thrust Z'
 
-            - actuator_type: 'servo'
-              group_label: 'Control Surfaces'
-              count: 'CA_SV_CS_COUNT'
-              item_label_prefix: 'Surface ${i}'
-              per_item_parameters:
-                extra:
-                  - name: 'CA_SV_CS${i}_TYPE'
-                    label: 'Type'
-                  - name: 'CA_SV_CS${i}_TRQ_R'
-                    label: 'Roll Scale'
-                  - name: 'CA_SV_CS${i}_TRQ_P'
-                    label: 'Pitch Scale'
-                  - name: 'CA_SV_CS${i}_TRQ_Y'
-                    label: 'Yaw Scale'
-                  - name: 'CA_SV_CS${i}_TRIM'
-                    label: 'Trim'
-                  - name: 'CA_SV_CS${i}_THRUST_X'
-                    label: 'Thrust X'
-                  - name: 'CA_SV_CS${i}_THRUST_Y'
-                    label: 'Thrust Y'
-                  - name: 'CA_SV_CS${i}_THRUST_Z'
-                    label: 'Thrust Z'
+                - actuator_type: 'servo'
+                  group_label: 'Control Surfaces'
+                  count: 'CA_SV_CS_COUNT'
+                  item_label_prefix: 'Surface ${i}'
+                  per_item_parameters:
+                    extra:
+                      - name: 'CA_SV_CS${i}_TYPE'
+                        label: 'Type'
+                      - name: 'CA_SV_CS${i}_TRQ_R'
+                        label: 'Roll Scale'
+                      - name: 'CA_SV_CS${i}_TRQ_P'
+                        label: 'Pitch Scale'
+                      - name: 'CA_SV_CS${i}_TRQ_Y'
+                        label: 'Yaw Scale'
+                      - name: 'CA_SV_CS${i}_TRIM'
+                        label: 'Trim'
+                      - name: 'CA_SV_CS${i}_TX'
+                        label: 'Thrust X'
+                      - name: 'CA_SV_CS${i}_TY'
+                        label: 'Thrust Y'
+                      - name: 'CA_SV_CS${i}_TZ'
+                        label: 'Thrust Z'
             # *** END-CUSTOM ***

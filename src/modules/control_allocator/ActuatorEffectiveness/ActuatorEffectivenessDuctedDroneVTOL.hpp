@@ -41,7 +41,8 @@
 // #include "ActuatorEffectivenessTilts.hpp" // Commenting out 
 #include <px4_platform_common/module_params.h>
 
-#include <uORB/topics/actuator_controls.h>
+#include <uORB/topics/vehicle_torque_setpoint.h>
+#include <uORB/topics/vehicle_thrust_setpoint.h>
 #include <uORB/Subscription.hpp>
 
 class ActuatorEffectivenessDuctedDroneVTOL : public ModuleParams, public ActuatorEffectiveness
@@ -98,8 +99,9 @@ protected:
 		matrix::Vector3f servo_thrust_gain;
 	};
 	
-	ServoParamHandles _servo_param_handles[NUM_SERVOS_MAX];
-	ServoParam _servo_param[NUM_SERVOS_MAX];
+	// ServoParamHandles _servo_param_handles[NUM_SERVOS_MAX];
+	// ServoParam _servo_param[NUM_SERVOS_MAX];
 
-	uORB::Subscription _actuator_controls_0_sub{ORB_ID(actuator_controls_0)};
+	uORB::Subscription _torque_sp_sub{ORB_ID(vehicle_torque_setpoint)};
+	uORB::Subscription _thrust_sp_sub{ORB_ID(vehicle_thrust_setpoint)};
 };

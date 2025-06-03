@@ -53,11 +53,11 @@ ActuatorEffectivenessControlSurfacesDucted::ActuatorEffectivenessControlSurfaces
 		// snprintf(buffer, sizeof(buffer), "CA_SV_CS%u_TRIM", i);
 		// _param_handles[i].trim = param_find(buffer);
 
-        snprintf(buffer, sizeof(buffer), "CA_SV_CS%u_THRUST_X", i);
+        snprintf(buffer, sizeof(buffer), "CA_SV_CS%u_TX", i);
         _param_handles[i].thrust[0] = param_find(buffer);
-        snprintf(buffer, sizeof(buffer), "CA_SV_CS%u_THRUST_Y", i);
+        snprintf(buffer, sizeof(buffer), "CA_SV_CS%u_TY", i);
         _param_handles[i].thrust[1] = param_find(buffer);
-        snprintf(buffer, sizeof(buffer), "CA_SV_CS%u_THRUST_Z", i);
+        snprintf(buffer, sizeof(buffer), "CA_SV_CS%u_TZ", i);
         _param_handles[i].thrust[2] = param_find(buffer);
 	}
 

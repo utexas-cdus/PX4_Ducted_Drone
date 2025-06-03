@@ -69,11 +69,11 @@ ActuatorEffectivenessRotorsDucted::ActuatorEffectivenessRotorsDucted(ModuleParam
 		_param_handles[i].torque[2] = param_find(buffer);
        
         // Get Thrust Contributions for each Rotor 
-        snprintf(buffer, sizeof(buffer), "CA_RT%u_THRUST_X", i);
+        snprintf(buffer, sizeof(buffer), "CA_RT%u_TX", i);
         _param_handles[i].thrust[0] = param_find(buffer);
-        snprintf(buffer, sizeof(buffer), "CA_RT%u_THRUST_Y", i);
+        snprintf(buffer, sizeof(buffer), "CA_RT%u_TY", i);
         _param_handles[i].thrust[1] = param_find(buffer);
-        snprintf(buffer, sizeof(buffer), "CA_RT%u_THRUST_Z", i);
+        snprintf(buffer, sizeof(buffer), "CA_RT%u_TZ", i);
         _param_handles[i].thrust[2] = param_find(buffer);
 	}
 
