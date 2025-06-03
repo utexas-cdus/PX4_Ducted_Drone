@@ -270,6 +270,12 @@ ControlAllocator::update_effectiveness_source()
 			tmp = new ActuatorEffectivenessHelicopterCoaxial(this);
 			break;
 
+		/*** START CUSTOM DUCTED DRONE ***/
+		case EffectivenessSource::DUCTED_DRONE:
+			tmp = new ActuatorEffectivenessDuctedDroneVTOL(this);
+			break;
+		/*** END CUSTOM DUCTED DRONE ***/
+
 		default:
 			PX4_ERR("Unknown airframe");
 			break;

@@ -53,6 +53,7 @@
 #include <ActuatorEffectivenessUUV.hpp>
 #include <ActuatorEffectivenessHelicopter.hpp>
 #include <ActuatorEffectivenessHelicopterCoaxial.hpp>
+#include <ActuatorEffectivenessDuctedDroneVTOL.hpp>
 
 #include <ControlAllocation.hpp>
 #include <ControlAllocationPseudoInverse.hpp>
