@@ -159,6 +159,7 @@ private:
 		HELICOPTER_TAIL_ESC = 10,
 		HELICOPTER_TAIL_SERVO = 11,
 		HELICOPTER_COAXIAL = 12,
+		DUCTED_DRONE = 13,
 	};
 
 	enum class FailureMode {
