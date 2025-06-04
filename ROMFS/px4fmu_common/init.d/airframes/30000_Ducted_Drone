@@ -19,7 +19,7 @@
 . ${R}etc/init.d/rc.mc_defaults
 . ${R}etc/init.d/rc.vtol_defaults
 
-set SYS_AUTOSTART 30000
+#set SYS_AUTOSTART 30000
 
 # Set the Airframe type - This determines the Actuator Effectiveness Matrix and CA Method used 
 param set-default CA_AIRFRAME 13 # Custom Type of
