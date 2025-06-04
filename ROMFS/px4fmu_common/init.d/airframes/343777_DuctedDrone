@@ -1,21 +1,16 @@
 #!/bin/sh
 #
-# @name Generic Quadplane VTOL
+# @name Ducted Drone eVTOL
 #
 # @type Standard VTOL
 # @class VTOL
 #
-# @maintainer
+# @maintainer Jeffrey Young <your_email@example.com>
 #
-# @output MAIN1 motor 1
-# @output MAIN2 motor 2
-# @output MAIN3 motor 3
-# @output MAIN4 motor 4
-# @output AUX1 Aileron 1
-# @output AUX2 Aileron 2
-# @output AUX3 Elevator
-# @output AUX4 Rudder
-# @output AUX5 Throttle
+# @output Motor1 Left Duct
+# @output Motor2 Right Duct
+# @output Servo1 Tilt Servo Left
+# @output Servo2 Tilt Servo Right
 #
 # @board px4_fmu-v2 exclude
 # @board bitcraze_crazyflie exclude
