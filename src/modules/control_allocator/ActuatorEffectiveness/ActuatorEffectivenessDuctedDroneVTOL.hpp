@@ -110,4 +110,6 @@ protected:
 
 	uORB::Subscription _torque_sp_sub{ORB_ID(vehicle_torque_setpoint)};
 	uORB::Subscription _thrust_sp_sub{ORB_ID(vehicle_thrust_setpoint)};
+	uORB::Subscription _flaps_setpoint_sub{ORB_ID(flaps_setpoint)};
+	uORB::Subscription _spoilers_setpoint_sub{ORB_ID(spoilers_setpoint)};
 };
