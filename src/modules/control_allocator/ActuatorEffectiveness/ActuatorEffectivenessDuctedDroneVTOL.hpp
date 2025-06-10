@@ -83,6 +83,10 @@ public:
 
 protected:
 	void updateParams() override;
+	// Not Used but adding in to avoid issues with flying VTOL Controller 
+	ActuatorEffectivenessRotors _rotors;
+	ActuatorEffectivenessControlSurfaces _control_surfaces;
+	// End not used 
 	ActuatorEffectivenessRotorsDucted *duct_rotors{nullptr};
 	ActuatorEffectivenessControlSurfacesDucted *duct_servos{nullptr};
 
@@ -110,6 +114,9 @@ protected:
 
 	uORB::Subscription _torque_sp_sub{ORB_ID(vehicle_torque_setpoint)};
 	uORB::Subscription _thrust_sp_sub{ORB_ID(vehicle_thrust_setpoint)};
+	// Not Used but adding in to avoid issues with flying VTOL Controller 
 	uORB::Subscription _flaps_setpoint_sub{ORB_ID(flaps_setpoint)};
 	uORB::Subscription _spoilers_setpoint_sub{ORB_ID(spoilers_setpoint)};
+	// End not used 
+
 };
