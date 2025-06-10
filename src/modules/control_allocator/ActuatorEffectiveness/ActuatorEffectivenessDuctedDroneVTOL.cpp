@@ -94,7 +94,7 @@ ActuatorEffectivenessDuctedDroneVTOL::getEffectivenessMatrix(Configuration &conf
 
 // Adding in Extra Functions not needed for Ducted Drone Vehicle Configuration but might effect SWIL Capabilites with jMAVSim 
 
-void ActuatorEffectivenessStandardVTOL::allocateAuxilaryControls(const float dt, int matrix_index,
+void ActuatorEffectivenessDuctedDroneVTOL::allocateAuxilaryControls(const float dt, int matrix_index,
 		ActuatorVector &actuator_sp)
 {
 	if (matrix_index == 1) {
@@ -114,7 +114,7 @@ void ActuatorEffectivenessStandardVTOL::allocateAuxilaryControls(const float dt,
 	}
 }
 
-void ActuatorEffectivenessStandardVTOL::updateSetpoint(const matrix::Vector<float, NUM_AXES> &control_sp,
+void ActuatorEffectivenessDuctedDroneVTOL::updateSetpoint(const matrix::Vector<float, NUM_AXES> &control_sp,
 		int matrix_index, ActuatorVector &actuator_sp, const matrix::Vector<float, NUM_ACTUATORS> &actuator_min,
 		const matrix::Vector<float, NUM_ACTUATORS> &actuator_max)
 {
@@ -123,7 +123,7 @@ void ActuatorEffectivenessStandardVTOL::updateSetpoint(const matrix::Vector<floa
 	}
 }
 
-void ActuatorEffectivenessStandardVTOL::setFlightPhase(const FlightPhase &flight_phase)
+void ActuatorEffectivenessDuctedDroneVTOL::setFlightPhase(const FlightPhase &flight_phase)
 {
 	if (_flight_phase == flight_phase) {
 		return;
