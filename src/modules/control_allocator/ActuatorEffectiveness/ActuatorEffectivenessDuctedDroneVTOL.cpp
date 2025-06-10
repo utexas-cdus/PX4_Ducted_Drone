@@ -44,7 +44,7 @@
 using namespace matrix;
 
 ActuatorEffectivenessDuctedDroneVTOL::ActuatorEffectivenessDuctedDroneVTOL(ModuleParams *parent)
-	: ModuleParams(parent)
+	: ModuleParams(parent), _rotors(this), _control_surfaces(this)
 {
 	_servo_count_handle = param_find("CA_SV_TL_COUNT");
 
