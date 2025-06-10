@@ -1,4 +1,4 @@
-#!/bin/sh
+ #!/bin/sh
 #
 # @name Ducted Drone VTOL
 #
@@ -71,3 +71,5 @@ set MIXER quad_x
 set MIXER_AUX vtol_AAERT
 set PWM_OUT 1234
 
+# Software-in-Hardware (SIH) Simulation 
+param set SIH_VEHICLE_TYPE 3 # Setting custom Number for Ducted Drone
