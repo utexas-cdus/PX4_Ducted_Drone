@@ -35,6 +35,7 @@
 
 #include "ActuatorEffectiveness.hpp"
 #include "ActuatorEffectivenessRotors.hpp"
+#include "ActuatorEffectivenessControlSurfaces.hpp"
 #include "ActuatorEffectivenessControlSurfacesDucted.hpp"
 #include "ActuatorEffectivenessRotorsDucted.hpp"
 
