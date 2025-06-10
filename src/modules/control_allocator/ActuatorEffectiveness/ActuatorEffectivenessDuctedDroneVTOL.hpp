@@ -70,8 +70,13 @@ public:
 
 	}
 
-	// void updateSetpoint(const matrix::Vector<float, NUM_AXES> &control_sp, int matrix_index,
-	// 		    ActuatorVector &actuator_sp) override;
+	void allocateAuxilaryControls(const float dt, int matrix_index, ActuatorVector &actuator_sp) override;
+
+	void updateSetpoint(const matrix::Vector<float, NUM_AXES> &control_sp, int matrix_index,
+			    ActuatorVector &actuator_sp, const matrix::Vector<float, NUM_ACTUATORS> &actuator_min,
+			    const matrix::Vector<float, NUM_ACTUATORS> &actuator_max) override;
+	
+	void setFlightPhase(const FlightPhase &flight_phase) override;
 
 	const char *name() const override { return "Ducted Drone VTOL "; }
 

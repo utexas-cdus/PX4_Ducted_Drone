@@ -92,3 +92,55 @@ ActuatorEffectivenessDuctedDroneVTOL::getEffectivenessMatrix(Configuration &conf
 	return (rotors_added_successfully && servos_added_successfully);
 }
 
+// Adding in Extra Functions not needed for Ducted Drone Vehicle Configuration but might effect SWIL Capabilites with jMAVSim 
+
+void ActuatorEffectivenessStandardVTOL::allocateAuxilaryControls(const float dt, int matrix_index,
+		ActuatorVector &actuator_sp)
+{
+	if (matrix_index == 1) {
+		// apply flaps
+		normalized_unsigned_setpoint_s flaps_setpoint;
+
+		if (_flaps_setpoint_sub.copy(&flaps_setpoint)) {
+			_control_surfaces.applyFlaps(flaps_setpoint.normalized_setpoint, _first_control_surface_idx, dt, actuator_sp);
+		}
+
+		// apply spoilers
+		normalized_unsigned_setpoint_s spoilers_setpoint;
+
+		if (_spoilers_setpoint_sub.copy(&spoilers_setpoint)) {
+			_control_surfaces.applySpoilers(spoilers_setpoint.normalized_setpoint, _first_control_surface_idx, dt, actuator_sp);
+		}
+	}
+}
+
+void ActuatorEffectivenessStandardVTOL::updateSetpoint(const matrix::Vector<float, NUM_AXES> &control_sp,
+		int matrix_index, ActuatorVector &actuator_sp, const matrix::Vector<float, NUM_ACTUATORS> &actuator_min,
+		const matrix::Vector<float, NUM_ACTUATORS> &actuator_max)
+{
+	if (matrix_index == 0) {
+		stopMaskedMotorsWithZeroThrust(_forwards_motors_mask, actuator_sp);
+	}
+}
+
+void ActuatorEffectivenessStandardVTOL::setFlightPhase(const FlightPhase &flight_phase)
+{
+	if (_flight_phase == flight_phase) {
+		return;
+	}
+
+	ActuatorEffectiveness::setFlightPhase(flight_phase);
+
+	// update stopped motors
+	switch (flight_phase) {
+	case FlightPhase::FORWARD_FLIGHT:
+		_stopped_motors_mask |= _upwards_motors_mask;
+		break;
+
+	case FlightPhase::HOVER_FLIGHT:
+	case FlightPhase::TRANSITION_FF_TO_HF:
+	case FlightPhase::TRANSITION_HF_TO_FF:
+		_stopped_motors_mask &= ~_upwards_motors_mask;
+		break;
+	}
+}
