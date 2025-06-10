@@ -44,6 +44,7 @@
 #include <uORB/topics/vehicle_torque_setpoint.h>
 #include <uORB/topics/vehicle_thrust_setpoint.h>
 #include <uORB/Subscription.hpp>
+#include <uORB/topics/normalized_unsigned_setpoint.h>
 
 class ActuatorEffectivenessDuctedDroneVTOL : public ModuleParams, public ActuatorEffectiveness
 {
