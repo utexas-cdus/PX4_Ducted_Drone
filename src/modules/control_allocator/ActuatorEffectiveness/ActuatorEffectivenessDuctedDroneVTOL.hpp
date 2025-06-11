@@ -87,6 +87,8 @@ protected:
 	// Not Used but adding in to avoid issues with flying VTOL Controller 
 	ActuatorEffectivenessRotors _rotors;
 	ActuatorEffectivenessControlSurfaces _control_surfaces;
+	// ActuatorEffectivenessRotors *_rotors{nullptr};
+	// ActuatorEffectivenessControlSurfaces *_control_surfaces{nullptr};
 	// End not used 
 	ActuatorEffectivenessRotorsDucted *duct_rotors{nullptr};
 	ActuatorEffectivenessControlSurfacesDucted *duct_servos{nullptr};
@@ -116,6 +118,11 @@ protected:
 	uORB::Subscription _torque_sp_sub{ORB_ID(vehicle_torque_setpoint)};
 	uORB::Subscription _thrust_sp_sub{ORB_ID(vehicle_thrust_setpoint)};
 	// Not Used but adding in to avoid issues with flying VTOL Controller 
+	uint32_t _upwards_motors_mask{};
+	uint32_t _forwards_motors_mask{};
+
+	int _first_control_surface_idx{0}; ///< applies to matrix 1
+	
 	uORB::Subscription _flaps_setpoint_sub{ORB_ID(flaps_setpoint)};
 	uORB::Subscription _spoilers_setpoint_sub{ORB_ID(spoilers_setpoint)};
 	// End not used 

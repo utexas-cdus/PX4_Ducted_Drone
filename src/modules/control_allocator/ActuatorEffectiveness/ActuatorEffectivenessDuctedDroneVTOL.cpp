@@ -90,6 +90,23 @@ ActuatorEffectivenessDuctedDroneVTOL::getEffectivenessMatrix(Configuration &conf
 	rotors_added_successfully = duct_rotors->addActuators(configuration);
 	servos_added_successfully = duct_servos->addActuators(configuration);
 	return (rotors_added_successfully && servos_added_successfully);
+
+	// Adding in unused code for StdVTOL Config
+		if (external_update == EffectivenessUpdateReason::NO_EXTERNAL_UPDATE) {
+		return false;
+	}
+
+	// Motors
+	configuration.selected_matrix = 0;
+	_rotors.enablePropellerTorqueNonUpwards(false);
+	const bool mc_rotors_added_successfully = _rotors.addActuators(configuration);
+	_upwards_motors_mask = _rotors.getUpwardsMotors();
+	_forwards_motors_mask = _rotors.getForwardsMotors();
+
+	// Control Surfaces
+	configuration.selected_matrix = 1;
+	_first_control_surface_idx = configuration.num_actuators_matrix[configuration.selected_matrix];
+	const bool surfaces_added_successfully = _control_surfaces.addActuators(configuration);
 }
 
 // Adding in Extra Functions not needed for Ducted Drone Vehicle Configuration but might effect SWIL Capabilites with jMAVSim 
