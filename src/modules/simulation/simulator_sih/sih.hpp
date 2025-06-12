@@ -198,9 +198,33 @@ private:
 	matrix::Vector3f    _w_B{};           // body rates in body frame [rad/s]
 	matrix::Quatf       _dq{};            // quaternion differential
 	matrix::Vector3f    _w_B_dot{};       // body rates differential
-	float       _u[NB_MOTORS] {};         // thruster signals
+	float       _u[NB_MOTORS] {};         // thruster signals (Normalized???)
 
-	enum class VehicleType {MC, FW, TS};
+	// START CUSTOM DUCTED DRONE PARAMS 
+	// Rotors 
+	float Fz_per_UR = 0.01037; // Upper Rotor (UR) contribution to Fz (Vertical Force)
+	float Fz_per_LR = 0.00967; // Upper Rotor (LR) contribution to Fz (Vertical Force)
+	float Mz_per_UR = 0.00030; // Upper Rotor (UR) contribution to Mz (Yaw Moment)
+	float Mz_per_LR = -0.00030; // Lower Rotor (LR) contribution to Mz (Yaw Moment)
+	// Servo 1
+	float Fx_per_S1 = 0.00185; // Servo 1 contribtuon to Fx (Translational Force)
+	float Fy_per_S1 = 0.00199; // Servo 1 contribtuon to Fy (Translational Force)
+	float Fz_per_S1 = 0.00; // Servo 1 contribtuon to Fz (Vertical Force)
+	float Mx_per_S1 = -0.00038; // Servo 1 contribution to Mx (Rolling Moment)
+	float My_per_S1 = 0.00105; // Servo 1 contribution to My (Pitching Moment)
+	float Mz_per_S1 = 0.00; // Servo 1 contribution to Mz (Yaw Moment)
+	// Servo 2 
+	float Fx_per_S2 = 0.00280; // Servo 2 contribtuon to Fx (Translational Force)
+	float Fy_per_S2 = -0.00340; // Servo 2 contribtuon to Fy (Translational Force)
+	float Fz_per_S2 = 0.00; // Servo 2 contribtuon to Fz (Vertical Force)
+	float Mx_per_S2 = 0.00105; // Servo 2 contribution to Mx (Rolling Moment)
+	float My_per_S2 = 0.00040; // Servo 2 contribution to My (Pitching Moment)
+	float Mz_per_S2 = 0.00; // Servo 2 contribution to Mz (Yaw Moment)
+	// END CUSTOM DUCTED DRONE PARAMS
+
+
+
+	enum class VehicleType {MC, FW, TS, DD};
 	VehicleType _vehicle = VehicleType::MC;
 
 	// aerodynamic segments for the fixedwing

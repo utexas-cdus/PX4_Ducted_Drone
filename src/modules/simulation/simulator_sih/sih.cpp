@@ -76,7 +76,7 @@ void Sih::run()
 	_airspeed_time = task_start;
 	_dist_snsr_time = task_start;
 	_vehicle = (VehicleType)constrain(_sih_vtype.get(), static_cast<typeof _sih_vtype.get()>(0),
-					  static_cast<typeof _sih_vtype.get()>(2));
+					  static_cast<typeof _sih_vtype.get()>(3));
 
 	_actuator_out_sub = uORB::Subscription{ORB_ID(actuator_outputs_sim)};
 
@@ -299,7 +299,10 @@ void Sih::read_motors(const float dt)
 
 void Sih::generate_force_and_torques()
 {
-	if (_vehicle == VehicleType::MC) {
+	// For the Ducted Drone Vehcile, we will only be using the Multi-copter (MC) Switch case. 
+	// Implementing custom Dynamics based on the Actuator Effectiveness Matrix. 
+
+	if (_vehicle == VehicleType::MC) { 
 		_T_B = Vector3f(0.0f, 0.0f, -_T_MAX * (+_u[0] + _u[1] + _u[2] + _u[3]));
 		_Mt_B = Vector3f(_L_ROLL * _T_MAX * (-_u[0] + _u[1] + _u[2] - _u[3]),
 				 _L_PITCH * _T_MAX * (+_u[0] - _u[1] + _u[2] - _u[3]),
@@ -313,13 +316,25 @@ void Sih::generate_force_and_torques()
 		_Mt_B = Vector3f();
 		generate_fw_aerodynamics();
 
-	} else if (_vehicle == VehicleType::TS) {
+	} else if (_vehicle == VehicleType::TS) { 
 		_T_B = Vector3f(0.0f, 0.0f, -_T_MAX * (_u[0] + _u[1]));
 		_Mt_B = Vector3f(_L_ROLL * _T_MAX * (_u[1] - _u[0]), 0.0f, _Q_MAX * (_u[1] - _u[0]));
 		generate_ts_aerodynamics();
 
 		// _Fa_I = -_KDV * _v_I;   // first order drag to slow down the aircraft
 		// _Ma_B = -_KDW * _w_B;   // first order angular damper
+	} else if (_vehicle == VehicleType::DD){ // Custom Forces/Torques for the Ducted Drone vehicle 
+		_T_B = Vector3f(Fx_per_S1*_u[3] + Fx_per_S2*_u[4], // X Component 
+			Fy_per_S1*_u[3] + Fy_per_S2*_u[4], // Y Component 
+			Fz_per_UR*_u[1] + Fz_per_LR*_u[2] + Fz_per_S1*_u[3] + Fz_per_S2*_u[4] // Z Component 
+		);
+
+		_Mt_B = Vector3f(Mx_per_S1 * _u[3] + Mx_per_S2 * _u[4], // X Component 
+						My_per_S1 * _u[3] + My_per_S2 * _u[4], // Y Component 
+						Mz_per_UR*_u[1] + Mz_per_LR*_u[2] + Mz_per_S1*_u[3] + Mz_per_S2*4_u[4] // Z Component 
+		);
+		_Fa_I = vector3f(0.0f,0.0f,0.0f);   // Setting the Aerodynamic Drag Force to Zero (Initial Test Case only - Refine later)
+		_Ma_B = vector3f(0.0f,0.0f,0.0f); // Settimg the Aerodynamic Drag Moment to Zero (Initial Test Case only - Refine later)
 	}
 }
 
@@ -377,6 +392,7 @@ void Sih::equations_of_motion(const float dt)
 	// Equations of motion of a rigid body
 	_p_I_dot = _v_I;                        // position differential
 	_v_I_dot = (_W_I + _Fa_I + _C_IB * _T_B) / _MASS;   // conservation of linear momentum
+	_v_I_dot = (_W_I + _C_IB * _T_B);
 	// _q_dot = _q.derivative1(_w_B);              // attitude differential
 	_dq = Quatf::expq(0.5f * dt * _w_B);
 	_w_B_dot = _Im1 * (_Mt_B + _Ma_B - _w_B.cross(_I * _w_B)); // conservation of angular momentum
@@ -415,6 +431,10 @@ void Sih::equations_of_motion(const float dt)
 			_q = Quatf(RPY);
 			_w_B.setZero();
 			_grounded = true;
+		} else if (_vehicle == VehicleType::DD){
+
+
+
 		}
 
 	} else {
@@ -618,7 +638,11 @@ int Sih::print_status()
 		PX4_INFO("aoa [deg]: %d", (int)(degrees(_ts[4].get_aoa())));
 		PX4_INFO("v segment (m/s)");
 		_ts[4].get_vS().print();
+	} else if (_vehicle == VehicleType::DD) {
+		PX4_INFO("Running Ducted Drone");
+
 	}
+
 
 	PX4_INFO("vehicle landed: %d", _grounded);
 	PX4_INFO("inertial position NED (m)");
