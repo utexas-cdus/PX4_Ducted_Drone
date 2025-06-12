@@ -38,7 +38,12 @@
  * @author Romain Chiappinelli      <romain.chiap@gmail.com>
  *
  * Coriolis g Corporation - January 2019
- */
+ * 
+ * UPDATES TO ENABLE Ducted Drone Simulation created by Jeffrey Young (I don't know what I am doing)
+ * 
+ * 
+ * 
+ */ 
 
 #include "aero.hpp"
 #include "sih.hpp"
