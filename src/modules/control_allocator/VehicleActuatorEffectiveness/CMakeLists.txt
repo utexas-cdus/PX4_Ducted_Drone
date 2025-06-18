@@ -29,6 +29,13 @@ px4_add_library(VehicleActuatorEffectiveness
 	ActuatorEffectivenessRoverAckermann.cpp
 	RpmControl.hpp
 	RpmControl.cpp
+	# Ducted Drone Files 
+	ActuatorEffectivenessDuctedDroneVTOL.cpp
+	ActuatorEffectivenessDuctedDroneVTOL.hpp
+	ActuatorEffectivenessControlSurfacesDucted.cpp
+	ActuatorEffectivenessControlSurfacesDucted.hpp
+	ActuatorEffectivenessRotorsDucted.cpp
+	ActuatorEffectivenessRotorsDucted.hpp
 )
 
 target_compile_options(VehicleActuatorEffectiveness PRIVATE ${MAX_CUSTOM_OPT_LEVEL})
