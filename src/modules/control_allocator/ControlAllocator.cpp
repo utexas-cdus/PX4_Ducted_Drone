@@ -272,6 +272,11 @@ ControlAllocator::update_effectiveness_source()
 		case EffectivenessSource::SPACECRAFT_3D:
 			// spacecraft_allocation does allocation and publishes directly to actuator_motors topic
 			break;
+		/*** START CUSTOM DUCTED DRONE ***/
+		case EffectivenessSource::DUCTED_DRONE:
+			tmp = new ActuatorEffectivenessDuctedDroneVTOL(this);
+			break;
+		/*** END CUSTOM DUCTED DRONE ***/
 
 		default:
 			PX4_ERR("Unknown airframe");

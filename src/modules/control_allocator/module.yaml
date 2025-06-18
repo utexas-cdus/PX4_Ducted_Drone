@@ -33,6 +33,9 @@ parameters:
                 13: Rover (Mecanum)
                 14: Spacecraft 2D
                 15: Spacecraft 3D
+                # BEGIN CUSTOM
+                16: Ducted Drone
+                # END CUSTOM
             default: 0
 
         CA_METHOD:
