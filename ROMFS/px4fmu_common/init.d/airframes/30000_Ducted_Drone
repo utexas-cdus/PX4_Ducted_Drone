@@ -22,7 +22,7 @@
 set SYS_AUTOSTART 30000
 
 # Set the Airframe type - This determines the Actuator Effectiveness Matrix and CA Method used 
-param set-default CA_AIRFRAME 13 # Custom Type of
+param set-default CA_AIRFRAME 16 
 param set-default CA_METHOD 1
 
 
