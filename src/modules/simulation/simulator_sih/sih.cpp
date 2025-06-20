@@ -315,6 +315,15 @@ void Sih::read_motors(const float dt)
 				_u[i] = _u[i] + dt / _T_TAU * (u_sp - _u[i]); // first order transfer function with time constant tau
 			}
 		}
+
+		// DEBUGGING - COMMENT OUT AS NEEDED 
+		if (dt > 5){
+
+		PX4_INFO("PWM Outputs from Firmware are");
+		for(unsigned i = 0; i < NUM_ACTUATORS_MAX; i++){
+			PX4_INFO("PWM Channel %u: %.4f", i, static_cast<double>(_u[i]));
+		}
+		}
 	}
 }
 
@@ -379,8 +388,10 @@ void Sih::generate_force_and_torques()
 						My_per_S1 * _u[3] + My_per_S2 * _u[4], // Y Component 
 						Mz_per_UR*_u[1] + Mz_per_LR*_u[2] + Mz_per_S1*_u[3] + Mz_per_S2*_u[4] // Z Component 
 		);
-		_Fa_E = Vector3f(0.0f,0.0f,0.0f);   // Setting the Aerodynamic Drag Force to Zero (Initial Test Case only - Refine later)
-		_Ma_B = Vector3f(0.0f,0.0f,0.0f); // Settimg the Aerodynamic Drag Moment to Zero (Initial Test Case only - Refine later)
+		
+		generate_fw_aerodynamics(0, 0, 0, 0);
+		// _Fa_E = Vector3f(0.0f,0.0f,0.0f);   // Setting the Aerodynamic Drag Force to Zero (Initial Test Case only - Refine later)
+		// _Ma_B = Vector3f(0.0f,0.0f,0.0f); // Settimg the Aerodynamic Drag Moment to Zero (Initial Test Case only - Refine later)
 
 	}
 }
