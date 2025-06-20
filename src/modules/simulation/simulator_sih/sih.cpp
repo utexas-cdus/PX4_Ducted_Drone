@@ -359,28 +359,28 @@ void Sih::generate_force_and_torques()
 
 	} else if (_vehicle == VehicleType::StandardVTOL) {
 
-		// _T_B = Vector3f(_T_MAX * 2 * _u[7], 0.0f, -_T_MAX * (+_u[0] + _u[1] + _u[2] + _u[3]));
-		// _Mt_B = Vector3f(_L_ROLL * _T_MAX * (-_u[0] + _u[1] + _u[2] - _u[3]),
-		// 		 _L_PITCH * _T_MAX * (+_u[0] - _u[1] + _u[2] - _u[3]),
-		// 		 _Q_MAX * (+_u[0] + _u[1] - _u[2] - _u[3]));
+		_T_B = Vector3f(_T_MAX * 2 * _u[7], 0.0f, -_T_MAX * (+_u[0] + _u[1] + _u[2] + _u[3]));
+		_Mt_B = Vector3f(_L_ROLL * _T_MAX * (-_u[0] + _u[1] + _u[2] - _u[3]),
+				 _L_PITCH * _T_MAX * (+_u[0] - _u[1] + _u[2] - _u[3]),
+				 _Q_MAX * (+_u[0] + _u[1] - _u[2] - _u[3]));
 
-		// // thrust 0 because it is already contained in _T_B. in
-		// // equations_of_motion they are all summed into sum_of_forces_E
-		// generate_fw_aerodynamics(_u[4], _u[5], _u[6], 0);
+		// thrust 0 because it is already contained in _T_B. in
+		// equations_of_motion they are all summed into sum_of_forces_E
+		generate_fw_aerodynamics(_u[4], _u[5], _u[6], 0);
 
 
-		// Hijacking StandardVTOL For Ducted Drone LOL 
-		_T_B = Vector3f(Fx_per_S1*_u[3] + Fx_per_S2*_u[4], // X Component 
-		Fy_per_S1*_u[3] + Fy_per_S2*_u[4], // Y Component 
-		Fz_per_UR*_u[1] + Fz_per_LR*_u[2] + Fz_per_S1*_u[3] + Fz_per_S2*_u[4] // Z Component 
-		);
+		// // Hijacking StandardVTOL For Ducted Drone LOL 
+		// _T_B = Vector3f(Fx_per_S1*_u[3] + Fx_per_S2*_u[4], // X Component 
+		// Fy_per_S1*_u[3] + Fy_per_S2*_u[4], // Y Component 
+		// Fz_per_UR*_u[1] + Fz_per_LR*_u[2] + Fz_per_S1*_u[3] + Fz_per_S2*_u[4] // Z Component 
+		// );
 
-		_Mt_B = Vector3f(Mx_per_S1 * _u[3] + Mx_per_S2 * _u[4], // X Component 
-						My_per_S1 * _u[3] + My_per_S2 * _u[4], // Y Component 
-						Mz_per_UR*_u[1] + Mz_per_LR*_u[2] + Mz_per_S1*_u[3] + Mz_per_S2*_u[4] // Z Component 
-		);
-		_Fa_E = Vector3f(0.0f,0.0f,0.0f);   // Setting the Aerodynamic Drag Force to Zero (Initial Test Case only - Refine later)
-		_Ma_B = Vector3f(0.0f,0.0f,0.0f); // Settimg the Aerodynamic Drag Moment to Zero (Initial Test Case only - Refine later)
+		// _Mt_B = Vector3f(Mx_per_S1 * _u[3] + Mx_per_S2 * _u[4], // X Component 
+		// 				My_per_S1 * _u[3] + My_per_S2 * _u[4], // Y Component 
+		// 				Mz_per_UR*_u[1] + Mz_per_LR*_u[2] + Mz_per_S1*_u[3] + Mz_per_S2*_u[4] // Z Component 
+		// );
+		// _Fa_E = Vector3f(0.0f,0.0f,0.0f);   // Setting the Aerodynamic Drag Force to Zero (Initial Test Case only - Refine later)
+		// _Ma_B = Vector3f(0.0f,0.0f,0.0f); // Settimg the Aerodynamic Drag Moment to Zero (Initial Test Case only - Refine later)
 
 	}
 }
