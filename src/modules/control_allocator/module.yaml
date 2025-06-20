@@ -106,8 +106,7 @@ parameters:
             min: 0
             max: 10
             default: 0.0
-
-
+        
         # (MC) Rotors
         CA_ROTOR_COUNT:
             description:
@@ -240,7 +239,7 @@ parameters:
             num_instances: *max_num_mc_motors
             instance_start: 0
             default: 0
-        
+        # BEGIN CUSTOM 
         # CUSTOM DUCTED DRONE PARAMS FOR ROTORS
         CA_RT${i}_TRQ_R:
             description:
@@ -296,6 +295,7 @@ parameters:
             instance_start: 0
             default: 0.0
         # END CUSTOM DUCTED DRONE PARAMS
+        # END CUSTOM 
 
         # control surfaces
         CA_SV_CS_COUNT:
@@ -651,6 +651,7 @@ parameters:
                 1: Remove first failed motor from effectiveness
             default: 0
 
+        # BEGIN CUSTOM 
         # BEGIN CUSTOM DUCTED DRONE PARAMS  
         CA_SV_CS${i}_TX:
           description:
@@ -681,6 +682,7 @@ parameters:
           num_instances: *max_num_servos
           instance_start: 0
           default: 0.0
+          # END CUSTOM DUCTED DRONE PARAMS  
           # *** END-CUSTOM ***
 
 # Mixer
@@ -1296,15 +1298,17 @@ mixer:
                         position: [ -1, 1, 0 ]
                       - name: 'Left Motor Back'
                         position: [ -1, -1, 0 ]
-                                    13:  # Ducted Drone
-            title: 'Ducted Drone'
-            actuators:
-                - actuator_type: 'motor'
-                  group_label: 'Motors'
-                  count: 'CA_ROTOR_COUNT'
-                  per_item_parameters:
-                    standard:
-                      position: [ 'CA_ROTOR${i}_PX', 'CA_ROTOR${i}_PY', 'CA_ROTOR${i}_PZ' ]
+            
+            # *** BEGIN-CUSTOM ***
+            16: # Ducted Drone (Jeffrey)
+                title: 'Ducted Drone'
+                actuators:
+                  - actuator_type: 'motor'
+                    group_label: 'Motors'
+                    count: 'CA_ROTOR_COUNT'
+                    per_item_parameters:
+                      standard:
+                         position: [ 'CA_ROTOR${i}_PX', 'CA_ROTOR${i}_PY', 'CA_ROTOR${i}_PZ' ]
                     extra:
                       - name: 'CA_ROTOR${i}_KM'
                         label: 'Direction CCW'
@@ -1323,26 +1327,26 @@ mixer:
                       - name: 'CA_RT${i}_TZ'
                         label: 'Thrust Z'
 
-                - actuator_type: 'servo'
-                  group_label: 'Control Surfaces'
-                  count: 'CA_SV_CS_COUNT'
-                  item_label_prefix: 'Surface ${i}'
-                  per_item_parameters:
-                    extra:
-                      - name: 'CA_SV_CS${i}_TYPE'
-                        label: 'Type'
-                      - name: 'CA_SV_CS${i}_TRQ_R'
-                        label: 'Roll Scale'
-                      - name: 'CA_SV_CS${i}_TRQ_P'
-                        label: 'Pitch Scale'
-                      - name: 'CA_SV_CS${i}_TRQ_Y'
-                        label: 'Yaw Scale'
-                      - name: 'CA_SV_CS${i}_TRIM'
-                        label: 'Trim'
-                      - name: 'CA_SV_CS${i}_TX'
-                        label: 'Thrust X'
-                      - name: 'CA_SV_CS${i}_TY'
-                        label: 'Thrust Y'
-                      - name: 'CA_SV_CS${i}_TZ'
-                        label: 'Thrust Z'
+                  - actuator_type: 'servo'
+                    group_label: 'Control Surfaces'
+                    count: 'CA_SV_CS_COUNT'
+                    item_label_prefix: 'Surface ${i}'
+                    per_item_parameters:
+                      extra:
+                        - name: 'CA_SV_CS${i}_TYPE'
+                          label: 'Type'
+                        - name: 'CA_SV_CS${i}_TRQ_R'
+                          label: 'Roll Scale'
+                        - name: 'CA_SV_CS${i}_TRQ_P'
+                          label: 'Pitch Scale'
+                        - name: 'CA_SV_CS${i}_TRQ_Y'
+                          label: 'Yaw Scale'
+                        - name: 'CA_SV_CS${i}_TRIM'
+                          label: 'Trim'
+                        - name: 'CA_SV_CS${i}_TX'
+                          label: 'Thrust X'
+                        - name: 'CA_SV_CS${i}_TY'
+                          label: 'Thrust Y'
+                        - name: 'CA_SV_CS${i}_TZ'
+                          label: 'Thrust Z'
             # *** END-CUSTOM ***
