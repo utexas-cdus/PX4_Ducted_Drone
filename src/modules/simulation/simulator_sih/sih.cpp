@@ -317,8 +317,8 @@ void Sih::read_motors(const float dt)
 		}
 
 		// DEBUGGING - COMMENT OUT AS NEEDED 
-		if (dt > 5){
-
+		dt_cumulative = dt + dt_cumulative 
+		if (dt_cumulative > 5){
 		PX4_INFO("PWM Outputs from Firmware are");
 		for(unsigned i = 0; i < NUM_ACTUATORS_MAX; i++){
 			PX4_INFO("PWM Channel %u: %.4f", i, static_cast<double>(_u[i]));

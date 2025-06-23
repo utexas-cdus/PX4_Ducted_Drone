@@ -240,6 +240,10 @@ private:
 	float Mx_per_S2 = -0.00105; // Servo 2 contribution to Mx (Rolling Moment)
 	float My_per_S2 = 0.00040; // Servo 2 contribution to My (Pitching Moment)
 	float Mz_per_S2 = 0.00; // Servo 2 contribution to Mz (Yaw Moment)
+
+	// SIMULATION DEBUGGING PARAMS 
+	float dt_cumulative = 0.0; 
+
 	// END CUSTOM DUCTED DRONE PARAMS
 
 	enum class VehicleType {Quadcopter, FixedWing, TailsitterVTOL, StandardVTOL, Hexacopter, First = Quadcopter, Last = Hexacopter}; // numbering dependent on parameter SIH_VEHICLE_TYPE
