@@ -317,11 +317,16 @@ void Sih::read_motors(const float dt)
 		}
 
 		// DEBUGGING - COMMENT OUT AS NEEDED 
-		dt_cumulative = dt + dt_cumulative 
-		if (dt_cumulative > 5){
-		PX4_INFO("PWM Outputs from Firmware are");
-		for(unsigned i = 0; i < NUM_ACTUATORS_MAX; i++){
-			PX4_INFO("PWM Channel %u: %.4f", i, static_cast<double>(_u[i]));
+		dt_cumulative += dt;
+		if (dt_cumulative > time_threshold){
+			int current_time = static_cast<int>(dt_cumulative);
+
+			if (current_time > last_print_time)
+			last_print_time = current_time;
+
+			PX4_INFO("PWM Outputs from Firmware are");
+			for(unsigned i = 0; i < NUM_ACTUATORS_MAX; i++){
+				PX4_INFO("PWM Channel %u: %.4f", i, static_cast<double>(_u[i]));
 		}
 		}
 	}

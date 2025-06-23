@@ -242,8 +242,9 @@ private:
 	float Mz_per_S2 = 0.00; // Servo 2 contribution to Mz (Yaw Moment)
 
 	// SIMULATION DEBUGGING PARAMS 
-	float dt_cumulative = 0.0; 
-
+	float dt_cumulative = 0.0;
+	float time_threshold = 15.0; 
+	int last_print_time = -1; 
 	// END CUSTOM DUCTED DRONE PARAMS
 
 	enum class VehicleType {Quadcopter, FixedWing, TailsitterVTOL, StandardVTOL, Hexacopter, First = Quadcopter, Last = Hexacopter}; // numbering dependent on parameter SIH_VEHICLE_TYPE
