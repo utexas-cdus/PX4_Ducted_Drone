@@ -318,15 +318,14 @@ void Sih::read_motors(const float dt)
 
 		// DEBUGGING - COMMENT OUT AS NEEDED 
 		dt_cumulative += dt;
-		if (dt_cumulative > time_threshold){
-			int current_time = static_cast<int>(dt_cumulative);
+		int current_second = static_cast<int>(dt_cumulative);
 
-			if (current_time > last_print_time)
-			last_print_time = current_time;
-
+		if ((dt_cumulative > time_threshold) && (current_second > last_printed_second)){
+			last_printed_second = current_second;
 			PX4_INFO("PWM Outputs from Firmware are");
 			for(unsigned i = 0; i < NUM_ACTUATORS_MAX; i++){
 				PX4_INFO("PWM Channel %u: %.4f", i, static_cast<double>(_u[i]));
+				// PX4_INFO("TIME STEP VALUES ARE: %.6f", static_cast<double>(dt));
 		}
 		}
 	}
@@ -384,14 +383,14 @@ void Sih::generate_force_and_torques()
 
 
 		// Hijacking StandardVTOL For Ducted Drone LOL 
-		_T_B = Vector3f(Fx_per_S1*_u[3] + Fx_per_S2*_u[4], // X Component 
-		Fy_per_S1*_u[3] + Fy_per_S2*_u[4], // Y Component 
-		Fz_per_UR*_u[1] + Fz_per_LR*_u[2] + Fz_per_S1*_u[3] + Fz_per_S2*_u[4] // Z Component 
+		_T_B = Vector3f(Fx_per_S1*_u[0] + Fx_per_S2*_u[1], // X Component 
+		Fy_per_S1*_u[0] + Fy_per_S2*_u[1], // Y Component 
+		Fz_per_UR*_u[2] + Fz_per_LR*_u[3] + Fz_per_S1*_u[0] + Fz_per_S2*_u[1] // Z Component 
 		);
 
-		_Mt_B = Vector3f(Mx_per_S1 * _u[3] + Mx_per_S2 * _u[4], // X Component 
-						My_per_S1 * _u[3] + My_per_S2 * _u[4], // Y Component 
-						Mz_per_UR*_u[1] + Mz_per_LR*_u[2] + Mz_per_S1*_u[3] + Mz_per_S2*_u[4] // Z Component 
+		_Mt_B = Vector3f(Mx_per_S1 * _u[0] + Mx_per_S2 * _u[1], // X Component 
+						My_per_S1 * _u[0] + My_per_S2 * _u[1], // Y Component 
+						Mz_per_UR*_u[2] + Mz_per_LR*_u[3] + Mz_per_S1*_u[0] + Mz_per_S2*_u[1] // Z Component 
 		);
 		
 		generate_fw_aerodynamics(0, 0, 0, 0);

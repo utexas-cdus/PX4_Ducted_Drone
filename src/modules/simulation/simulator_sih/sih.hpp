@@ -222,29 +222,30 @@ private:
 
 	// START CUSTOM DUCTED DRONE PARAMS 
 	// Rotors 
-	float Fz_per_UR = -0.01037; // Upper Rotor (UR) contribution to Fz (Vertical Force)
-	float Fz_per_LR = -0.00967; // Upper Rotor (LR) contribution to Fz (Vertical Force)
-	float Mz_per_UR = -0.00030; // Upper Rotor (UR) contribution to Mz (Yaw Moment)
-	float Mz_per_LR = 0.00030; // Lower Rotor (LR) contribution to Mz (Yaw Moment)
+	float Fz_per_UR = -10.37; // Upper Rotor (UR) contribution to Fz (Vertical Force)
+	float Fz_per_LR = -9.67; // Upper Rotor (LR) contribution to Fz (Vertical Force)
+	float Mz_per_UR = -3.00; // Upper Rotor (UR) contribution to Mz (Yaw Moment)
+	float Mz_per_LR = 3.00; // Lower Rotor (LR) contribution to Mz (Yaw Moment)
 	// Servo 1
-	float Fx_per_S1 = -0.00185; // Servo 1 contribtuon to Fx (Translational Force)
-	float Fy_per_S1 = 0.00199; // Servo 1 contribtuon to Fy (Translational Force)
+	float Fx_per_S1 = 0.4625; // Servo 1 contribtuon to Fx (Translational Force)
+	float Fy_per_S1 = 0.4975; // Servo 1 contribtuon to Fy (Translational Force)
 	float Fz_per_S1 = 0.00; // Servo 1 contribtuon to Fz (Vertical Force)
-	float Mx_per_S1 = 0.00038; // Servo 1 contribution to Mx (Rolling Moment)
-	float My_per_S1 = 0.00072; // Servo 1 contribution to My (Pitching Moment)
+	float Mx_per_S1 = -0.0950; // Servo 1 contribution to Mx (Rolling Moment)
+	float My_per_S1 = 0.1800; // Servo 1 contribution to My (Pitching Moment)
 	float Mz_per_S1 = 0.00; // Servo 1 contribution to Mz (Yaw Moment)
 	// Servo 2 
-	float Fx_per_S2 = -0.00280; // Servo 2 contribtuon to Fx (Translational Force)
-	float Fy_per_S2 = -0.00340; // Servo 2 contribtuon to Fy (Translational Force)
+	float Fx_per_S2 = 0.700; // Servo 2 contribtuon to Fx (Translational Force)
+	float Fy_per_S2 = -0.85; // Servo 2 contribtuon to Fy (Translational Force)
 	float Fz_per_S2 = 0.00; // Servo 2 contribtuon to Fz (Vertical Force)
-	float Mx_per_S2 = -0.00105; // Servo 2 contribution to Mx (Rolling Moment)
-	float My_per_S2 = 0.00040; // Servo 2 contribution to My (Pitching Moment)
+	float Mx_per_S2 = 0.2625; // Servo 2 contribution to Mx (Rolling Moment)
+	float My_per_S2 = 0.100; // Servo 2 contribution to My (Pitching Moment)
 	float Mz_per_S2 = 0.00; // Servo 2 contribution to Mz (Yaw Moment)
 
 	// SIMULATION DEBUGGING PARAMS 
 	float dt_cumulative = 0.0;
 	float time_threshold = 15.0; 
-	int last_print_time = -1; 
+	float divisor = 250.0; 
+	int last_printed_second = -1;
 	// END CUSTOM DUCTED DRONE PARAMS
 
 	enum class VehicleType {Quadcopter, FixedWing, TailsitterVTOL, StandardVTOL, Hexacopter, First = Quadcopter, Last = Hexacopter}; // numbering dependent on parameter SIH_VEHICLE_TYPE
