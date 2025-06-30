@@ -215,6 +215,12 @@ private:
 	Params _params{};
 	bool _has_slew_rate{false};
 
+	// DEBUGGING PARAMS
+	float dt_cumulative = 0.0; 
+	int current_second = -1; 
+	int last_printed_second;
+	int time_threshold = 10.0; 
+
 	DEFINE_PARAMETERS(
 		(ParamInt<px4::params::CA_AIRFRAME>) _param_ca_airframe,
 		(ParamInt<px4::params::CA_METHOD>) _param_ca_method,

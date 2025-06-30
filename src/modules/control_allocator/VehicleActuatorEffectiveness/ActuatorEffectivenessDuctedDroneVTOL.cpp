@@ -87,8 +87,9 @@ ActuatorEffectivenessDuctedDroneVTOL::getEffectivenessMatrix(Configuration &conf
 
 	//Add rotors & Servos 
 	configuration.selected_matrix = 0;
-	rotors_added_successfully = duct_rotors->addActuators(configuration);
 	servos_added_successfully = duct_servos->addActuators(configuration);
+	rotors_added_successfully = duct_rotors->addActuators(configuration);
+	// servos_added_successfully = duct_servos->addActuators(configuration);
 	return (rotors_added_successfully && servos_added_successfully);
 
 	// Adding in unused code for StdVTOL Config

@@ -59,6 +59,12 @@ param set-default CA_SV_CS1_TX 0.00
 param set-default CA_SV_CS1_TY 0.00
 param set-default CA_SV_CS1_TZ 0.00
 
+# ROTOR POSITIONS 
+param set-default CA_ROTOR0_PX 0.00
+param set-default CA_ROTOR0_PY 0.00
+param set-default CA_ROTOR1_PX 0.00
+param set-default CA_ROTOR1_PY 0.00
+
 param set-default PWM_AUX_DIS5 950
 
 param set-default VT_TYPE 2
