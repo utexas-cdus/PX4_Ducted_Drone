@@ -453,7 +453,7 @@ ControlAllocator::Run()
 		
 		if ((current_second > time_threshold) && (current_second > last_printed_second)){
 		last_printed_second = current_second;
-			// print_status();
+			print_status();
 		}
 	}
 
@@ -845,13 +845,13 @@ int ControlAllocator::print_status()
 		}
 
 		PX4_INFO("  Effectiveness.T =");
-		// effectiveness.T().print();
-		effectiveness.print();
-		PX4_INFO("  minimum =");
-		_control_allocation[i]->getActuatorMin().T().print();
-		PX4_INFO("  maximum =");
-		_control_allocation[i]->getActuatorMax().T().print();
-		PX4_INFO("  Configured actuators: %i", _control_allocation[i]->numConfiguredActuators());
+		effectiveness.T().print();
+		// effectiveness.print();
+		// PX4_INFO("  minimum =");
+		// _control_allocation[i]->getActuatorMin().T().print();
+		// PX4_INFO("  maximum =");
+		// _control_allocation[i]->getActuatorMax().T().print();
+		// PX4_INFO("  Configured actuators: %i", _control_allocation[i]->numConfiguredActuators());
 	}
 
 	if (_handled_motor_failure_bitmask) {

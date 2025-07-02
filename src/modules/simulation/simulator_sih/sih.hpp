@@ -220,8 +220,8 @@ private:
 
 	float _u[NUM_ACTUATORS_MAX] {}; // thruster signals
 
-	// START CUSTOM DUCTED DRONE PARAMS 
-	// Rotors 
+	// START CUSTOM DUCTED DRONE PARAMS
+	// Rotors
 	float Fz_per_UR = -0.01037; // Upper Rotor (UR) contribution to Fz (Vertical Force)
 	float Fz_per_LR = -0.00967; // Upper Rotor (LR) contribution to Fz (Vertical Force)
 	float Mz_per_UR = 0.00030; // Upper Rotor (UR) contribution to Mz (Yaw Moment)
@@ -233,7 +233,7 @@ private:
 	float Mx_per_S1 = 0.00038; // Servo 1 contribution to Mx (Rolling Moment)
 	float My_per_S1 = 0.00072; // Servo 1 contribution to My (Pitching Moment)
 	float Mz_per_S1 = 0.00; // Servo 1 contribution to Mz (Yaw Moment)
-	// Servo 2 
+	// Servo 2
 	float Fx_per_S2 = -0.00280; // Servo 2 contribtuon to Fx (Translational Force)
 	float Fy_per_S2 = -0.00340; // Servo 2 contribtuon to Fy (Translational Force)
 	float Fz_per_S2 = 0.00; // Servo 2 contribtuon to Fz (Vertical Force)
@@ -241,10 +241,9 @@ private:
 	float My_per_S2 = 0.0040; // Servo 2 contribution to My (Pitching Moment)
 	float Mz_per_S2 = 0.00; // Servo 2 contribution to Mz (Yaw Moment)
 
-	// SIMULATION DEBUGGING PARAMS 
+	// SIMULATION DEBUGGING PARAMS
 	float dt_cumulative = 0.0;
-	float time_threshold = 10.0; 
-	float divisor = 250.0; 
+	float time_threshold = 10.0;
 	int last_printed_second = -1;
 	// END CUSTOM DUCTED DRONE PARAMS
 
