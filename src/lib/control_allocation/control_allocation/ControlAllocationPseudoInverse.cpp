@@ -64,6 +64,9 @@ ControlAllocationPseudoInverse::updatePseudoInverse()
 	if (_mix_update_needed) {
 		matrix::geninv(_effectiveness, _mix);
 
+		PX4_INFO("Mix (Pseudo-inverse of Effectiveness):");
+		_mix.print();
+
 		if (!_metric_allocation) {
 			if (_normalization_needs_update && !_had_actuator_failure) {
 				updateControlAllocationMatrixScale();

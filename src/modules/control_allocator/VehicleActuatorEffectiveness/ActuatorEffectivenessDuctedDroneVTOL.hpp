@@ -39,7 +39,7 @@
 #include "ActuatorEffectivenessControlSurfacesDucted.hpp"
 #include "ActuatorEffectivenessRotorsDucted.hpp"
 
-// #include "ActuatorEffectivenessTilts.hpp" // Commenting out 
+// #include "ActuatorEffectivenessTilts.hpp" // Commenting out
 #include <px4_platform_common/module_params.h>
 
 #include <uORB/topics/vehicle_torque_setpoint.h>
@@ -62,13 +62,14 @@ public:
 
 	/** The only valid Control Allocation method is Pseudo Inverse */
 	void getDesiredAllocationMethod(AllocationMethod allocation_method_out[MAX_NUM_MATRICES]) const override
-	{	
+	{
 		allocation_method_out[0] = AllocationMethod::PSEUDO_INVERSE;
 	}
 
 	void getNormalizeRPY(bool normalize[MAX_NUM_MATRICES]) const override
 	{
 		normalize[0] = true;
+		normalize[1] = false;
 
 	}
 
@@ -77,19 +78,19 @@ public:
 	void updateSetpoint(const matrix::Vector<float, NUM_AXES> &control_sp, int matrix_index,
 			    ActuatorVector &actuator_sp, const matrix::Vector<float, NUM_ACTUATORS> &actuator_min,
 			    const matrix::Vector<float, NUM_ACTUATORS> &actuator_max) override;
-	
+
 	void setFlightPhase(const FlightPhase &flight_phase) override;
 
 	const char *name() const override { return "Ducted Drone VTOL "; }
 
 protected:
 	void updateParams() override;
-	// Not Used but adding in to avoid issues with flying VTOL Controller 
+	// Not Used but adding in to avoid issues with flying VTOL Controller
 	ActuatorEffectivenessRotors _rotors;
 	ActuatorEffectivenessControlSurfaces _control_surfaces;
 	// ActuatorEffectivenessRotors *_rotors{nullptr};
 	// ActuatorEffectivenessControlSurfaces *_control_surfaces{nullptr};
-	// End not used 
+	// End not used
 	ActuatorEffectivenessRotorsDucted *duct_rotors{nullptr};
 	ActuatorEffectivenessControlSurfacesDucted *duct_servos{nullptr};
 
@@ -111,20 +112,20 @@ protected:
 		matrix::Vector3f servo_torque_gain;
 		matrix::Vector3f servo_thrust_gain;
 	};
-	
+
 	// ServoParamHandles _servo_param_handles[NUM_SERVOS_MAX];
 	// ServoParam _servo_param[NUM_SERVOS_MAX];
 
 	uORB::Subscription _torque_sp_sub{ORB_ID(vehicle_torque_setpoint)};
 	uORB::Subscription _thrust_sp_sub{ORB_ID(vehicle_thrust_setpoint)};
-	// Not Used but adding in to avoid issues with flying VTOL Controller 
+	// Not Used but adding in to avoid issues with flying VTOL Controller
 	uint32_t _upwards_motors_mask{};
 	uint32_t _forwards_motors_mask{};
 
 	int _first_control_surface_idx{0}; ///< applies to matrix 1
-	
+
 	uORB::Subscription _flaps_setpoint_sub{ORB_ID(flaps_setpoint)};
 	uORB::Subscription _spoilers_setpoint_sub{ORB_ID(spoilers_setpoint)};
-	// End not used 
+	// End not used
 
 };

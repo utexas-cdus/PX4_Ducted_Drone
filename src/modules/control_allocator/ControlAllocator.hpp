@@ -216,10 +216,13 @@ private:
 	bool _has_slew_rate{false};
 
 	// DEBUGGING PARAMS
-	float dt_cumulative = 0.0; 
-	int current_second = -1; 
+	float dt_cumulative = 0.0;
+	int current_second = -1;
 	int last_printed_second;
-	int time_threshold = 10.0; 
+	int time_threshold = 10.0;
+
+	actuator_servos_s _last_actuator_servos{}; ///< stores latest published servo controls for print_status()
+
 
 	DEFINE_PARAMETERS(
 		(ParamInt<px4::params::CA_AIRFRAME>) _param_ca_airframe,

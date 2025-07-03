@@ -445,20 +445,29 @@ ControlAllocator::Run()
 
 			_control_allocation[i]->clipActuatorSetpoint();
 		}
-		
-		// For every second of Firmware run time, output the print_status message 
 
-	    dt_cumulative += dt;
-		current_second = static_cast<int>(dt_cumulative);
-		
-		if ((current_second > time_threshold) && (current_second > last_printed_second)){
-		last_printed_second = current_second;
-			print_status();
-		}
+		// // For every second of Firmware run time, output the print_status message
+	    	// dt_cumulative += dt;
+		// current_second = static_cast<int>(dt_cumulative);
+
+		// if ((current_second > time_threshold) && (current_second > last_printed_second)){
+		// last_printed_second = current_second;
+		// 	PX4_INFO("FIRMWARE VALUES");
+		// 	print_status();
+		// }
 	}
 
 	// Publish actuator setpoint and allocator status
 	publish_actuator_controls();
+	// For every second of Firmware run time, output the print_status message
+	dt_cumulative += dt;
+	current_second = static_cast<int>(dt_cumulative);
+
+	if ((current_second > time_threshold) && (current_second > last_printed_second)){
+	last_printed_second = current_second;
+		PX4_INFO("FIRMWARE VALUES");
+		print_status();
+	}
 
 	// Publish status at limited rate, as it's somewhat expensive and we use it for slower dynamics
 	// (i.e. anti-integrator windup)
@@ -722,6 +731,7 @@ ControlAllocator::publish_actuator_controls()
 
 		_actuator_servos_pub.publish(actuator_servos);
 	}
+	_last_actuator_servos = actuator_servos;
 }
 
 void
@@ -825,7 +835,7 @@ int ControlAllocator::print_status()
 		PX4_INFO("Effectiveness Source: %s", _actuator_effectiveness->name());
 	}
 
-	// Print current Set point commands for Thrust and Torque 
+	// Print current Set point commands for Thrust and Torque
 	// matrix::Vector<float, NUM_AXES> c_print[ActuatorEffectiveness::MAX_NUM_MATRICES];
 	const matrix::Vector<float, NUM_AXES> &c = _control_allocation[0]->getControlSetpoint();
 
@@ -845,13 +855,22 @@ int ControlAllocator::print_status()
 		}
 
 		PX4_INFO("  Effectiveness.T =");
-		effectiveness.T().print();
-		// effectiveness.print();
+		// effectiveness.T().print();
+		effectiveness.print();
 		// PX4_INFO("  minimum =");
 		// _control_allocation[i]->getActuatorMin().T().print();
 		// PX4_INFO("  maximum =");
 		// _control_allocation[i]->getActuatorMax().T().print();
 		// PX4_INFO("  Configured actuators: %i", _control_allocation[i]->numConfiguredActuators());
+	}
+	for (int i = 0; i < _num_control_allocation; ++i) {
+	const auto &actuator_sp = _control_allocation[i]->getActuatorSetpoint();
+	PX4_INFO("Actuator Setpoint (u) Matrix %d:", i);
+	for (size_t j = 0; j < actuator_sp.size(); ++j) {
+		if (PX4_ISFINITE(actuator_sp(j))) {
+			PX4_INFO("  u[%d] = %.4f", static_cast<int>(j), static_cast<double>(actuator_sp(j)));
+		}
+	}
 	}
 
 	if (_handled_motor_failure_bitmask) {
