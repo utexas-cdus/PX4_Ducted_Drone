@@ -58,6 +58,10 @@ public:
 				    const ActuatorVector &actuator_trim, const ActuatorVector &linearization_point, int num_actuators,
 				    bool update_normalization_scale) override;
 	void setMetricAllocation(bool metric_allocation) { _metric_allocation = metric_allocation; }
+	void updatePseudoInverse();
+	const matrix::Matrix<float, NUM_ACTUATORS, NUM_AXES> &getMixMatrix() const { return _mix; }
+
+
 
 protected:
 	matrix::Matrix<float, NUM_ACTUATORS, NUM_AXES> _mix;
@@ -69,7 +73,7 @@ protected:
 	 * Recalculate pseudo inverse if required.
 	 *
 	 */
-	void updatePseudoInverse();
+	// void updatePseudoInverse();
 
 private:
 	void normalizeControlAllocationMatrix();

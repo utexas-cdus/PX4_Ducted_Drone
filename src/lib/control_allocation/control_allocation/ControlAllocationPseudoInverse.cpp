@@ -40,6 +40,8 @@
  */
 
 #include "ControlAllocationPseudoInverse.hpp"
+#include <px4_platform_common/log.h>
+
 
 void
 ControlAllocationPseudoInverse::setEffectivenessMatrix(
@@ -77,6 +79,9 @@ ControlAllocationPseudoInverse::updatePseudoInverse()
 		}
 
 		_mix_update_needed = false;
+
+		PX4_INFO("Mix (Pseudo-inverse of Effectiveness) AFTER normalization:");
+		_mix.print();
 	}
 }
 

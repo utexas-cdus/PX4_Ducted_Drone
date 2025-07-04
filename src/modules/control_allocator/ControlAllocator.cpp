@@ -465,8 +465,8 @@ ControlAllocator::Run()
 
 	if ((current_second > time_threshold) && (current_second > last_printed_second)){
 	last_printed_second = current_second;
-		PX4_INFO("FIRMWARE VALUES");
-		print_status();
+		// PX4_INFO("FIRMWARE VALUES");
+		// print_status();
 	}
 
 	// Publish status at limited rate, as it's somewhat expensive and we use it for slower dynamics
@@ -837,32 +837,38 @@ int ControlAllocator::print_status()
 
 	// Print current Set point commands for Thrust and Torque
 	// matrix::Vector<float, NUM_AXES> c_print[ActuatorEffectiveness::MAX_NUM_MATRICES];
-	const matrix::Vector<float, NUM_AXES> &c = _control_allocation[0]->getControlSetpoint();
+	// const matrix::Vector<float, NUM_AXES> &c = _control_allocation[0]->getControlSetpoint();
 
-	PX4_INFO("The setpoint Roll Torque is: %.4f", static_cast<double>(c(0)));
-	PX4_INFO("The setpoint Pitch Torque is: %.4f", static_cast<double>(c(1)));
-	PX4_INFO("The setpoint Yaw Torque is: %.4f", static_cast<double>(c(2)));
-	PX4_INFO("The setpoint X Thrust is: %.4f", static_cast<double>(c(3)));
-	PX4_INFO("The setpoint Y Thrust is: %.4f", static_cast<double>(c(4)));
-	PX4_INFO("The setpoint Z Thrust is: %.4f", static_cast<double>(c(5)));
+	// PX4_INFO("The setpoint Roll Torque is: %.4f", static_cast<double>(c(0)));
+	// PX4_INFO("The setpoint Pitch Torque is: %.4f", static_cast<double>(c(1)));
+	// PX4_INFO("The setpoint Yaw Torque is: %.4f", static_cast<double>(c(2)));
+	// PX4_INFO("The setpoint X Thrust is: %.4f", static_cast<double>(c(3)));
+	// PX4_INFO("The setpoint Y Thrust is: %.4f", static_cast<double>(c(4)));
+	// PX4_INFO("The setpoint Z Thrust is: %.4f", static_cast<double>(c(5)));
 
 	// Print current effectiveness matrix
-	for (int i = 0; i < _num_control_allocation; ++i) {
-		const ActuatorEffectiveness::EffectivenessMatrix &effectiveness = _control_allocation[i]->getEffectivenessMatrix();
+	// for (int i = 0; i < _num_control_allocation; ++i) {
+	// 	// const ActuatorEffectiveness::EffectivenessMatrix &effectiveness = _control_allocation[i]->getEffectivenessMatrix();
 
-		if (_num_control_allocation > 1) {
-			PX4_INFO("Instance: %i", i);
-		}
+	// 	if (_num_control_allocation > 1) {
+	// 		PX4_INFO("Instance: %i", i);
+	// 	}
+	// 	//PX4_INFO("  Effectiveness =");
+	// 	//effectiveness.print();
+	// 	//PX4_INFO("  Effectiveness.T =");
+	// 	//effectiveness.T().print();
+	// 	// PX4_INFO("  minimum =");
+	// 	// _control_allocation[i]->getActuatorMin().T().print();
+	// 	// PX4_INFO("  maximum =");
+	// 	// _control_allocation[i]->getActuatorMax().T().print();
+	// 	// PX4_INFO("  Configured actuators: %i", _control_allocation[i]->numConfiguredActuators());
 
-		PX4_INFO("  Effectiveness.T =");
-		// effectiveness.T().print();
-		effectiveness.print();
-		// PX4_INFO("  minimum =");
-		// _control_allocation[i]->getActuatorMin().T().print();
-		// PX4_INFO("  maximum =");
-		// _control_allocation[i]->getActuatorMax().T().print();
-		// PX4_INFO("  Configured actuators: %i", _control_allocation[i]->numConfiguredActuators());
-	}
+	// 	if (auto *pi = dynamic_cast<ControlAllocationPseudoInverse *>(_control_allocation[i])) {
+	// 		PX4_INFO("  Pseudo-inverse (Mix) =");
+        // 		pi->getMixMatrix().print();  // <- custom accessor we’ll add next
+	// 	}
+	// }
+
 	for (int i = 0; i < _num_control_allocation; ++i) {
 	const auto &actuator_sp = _control_allocation[i]->getActuatorSetpoint();
 	PX4_INFO("Actuator Setpoint (u) Matrix %d:", i);
@@ -882,6 +888,7 @@ int ControlAllocator::print_status()
 	perf_print_counter(_loop_perf);
 
 	return 0;
+
 }
 
 int ControlAllocator::custom_command(int argc, char *argv[])

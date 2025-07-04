@@ -323,10 +323,12 @@ void Sih::read_motors(const float dt)
 			} else {
 				float u_sp = actuators_out.output[i];
 				_u[i] = _u[i] + dt / _T_TAU * (u_sp - _u[i]); // first order transfer function with time constant tau
+				// _u[i] = u_sp;  // Direct mapping — no lag
+
 			}
 		}
 
-		// DEBUGGING - COMMENT OUT AS NEEDED
+		// // // DEBUGGING - COMMENT OUT AS NEEDED
 		// dt_cumulative += dt;
 		// int current_second = static_cast<int>(dt_cumulative);
 
@@ -334,6 +336,7 @@ void Sih::read_motors(const float dt)
 		// 	last_printed_second = current_second;
 		// 	PX4_INFO("PWM Outputs from Firmware are");
 		// 	for(unsigned i = 0; i < NUM_ACTUATORS_MAX; i++){
+		// 		PX4_INFO("Motor[%d] u_sp = %.5f", i, static_cast<double>(actuators_out.output[i]));
 		// 		PX4_INFO("PWM Channel %u: %.4f", i, static_cast<double>(_u[i]));
 		// 		// PX4_INFO("TIME STEP VALUES ARE: %.6f", static_cast<double>(dt));
 		// }
@@ -395,21 +398,84 @@ void Sih::generate_force_and_torques()
 		// Hijacking StandardVTOL For Ducted Drone
 
 		// Rewritting PWM Signals
-		_u[0] = _u[0] *1.0f;
-		_u[1] = _u[1] *1.0f;
-		_u[2] = _u[2] *1.0f;
-		_u[3] = _u[3] *1.0f;
+		// _u[0] = _u[0] *200.f + 1600.f;
+		// _u[1] = _u[1] *200.f + 1600.f;
+		// _u[2] = _u[2] *1000.f + 1500.f;
+		// _u[3] = _u[3] *1000.f + 1500.f;
 
-		_T_B = Vector3f(Fx_per_S1*_u[0] + Fx_per_S2*_u[1], // X Component
-		Fy_per_S1*_u[0] + Fy_per_S2*_u[1], // Y Component
-		+ Fz_per_UR*_u[2] + Fz_per_LR*_u[3] + Fz_per_S1*_u[0] + Fz_per_S2*_u[1] // Z Component
+		// float pwm_0 = _u[0] * 0.f; //+ 1600.f;
+		// float pwm_1 = _u[1] * 0.f; //+ 1600.f;
+		// float pwm_2 = _u[2] * 1000.f; //+ 1500.f;
+		// float pwm_3 = _u[3] * 1000.f; //+ 1500.f;
+
+		// pwm_0 = math::constrain(pwm_0, 1000.f, 2000.f);
+		// pwm_1 = math::constrain(pwm_1, 1000.f, 2000.f);
+		// pwm_2 = math::constrain(pwm_2, 1000.f, 2000.f);
+		// pwm_3 = math::constrain(pwm_3, 1000.f, 2000.f);
+
+
+		// Define minimum threshold for a valid command (tune as needed)
+		const float MIN_VALID_COMMAND = 0.05f;  // e.g. anything under 5% of full command is treated as noise
+
+		// Initialize PWM values with a safe default (e.g. neutral or off)
+		float pwm_0 = 0.f;
+		float pwm_1 = 0.f;
+		float pwm_2 = 0.f;
+		float pwm_3 = 0.f;
+
+		// Scale and constrain only if input signal is significant
+		if (fabsf(_u[0]) > MIN_VALID_COMMAND) {
+			pwm_0 = math::constrain(_u[0] * 200.f + 1500.f, 1300.f, 1700.f);
+		}
+
+		if (fabsf(_u[1]) > MIN_VALID_COMMAND) {
+			pwm_1 = math::constrain(_u[1] * 200.f + 1500.f, 1300.f, 1700.f);
+		}
+
+		if (fabsf(_u[2]) > MIN_VALID_COMMAND) {
+			pwm_2 = math::constrain(_u[2] * 1000.f, 1000.f, 2000.f);
+		}
+
+		if (fabsf(_u[3]) > MIN_VALID_COMMAND) {
+			pwm_3 = math::constrain(_u[3] * 1000.f, 1000.f, 2000.f);
+		}
+
+
+		_T_B = Vector3f(
+    		Fx_per_S1 * pwm_0 * 0.f + Fx_per_S2 * pwm_1 * 0.f,
+    		Fy_per_S1 * pwm_0 * 0.f + Fy_per_S2 * pwm_1 * 0.f,
+    		Fz_per_UR * pwm_2 + Fz_per_LR * pwm_3 + Fz_per_S1 * pwm_0 + Fz_per_S2 * pwm_1
 		);
 
-		_Mt_B = Vector3f(Mx_per_S1 * _u[0] + Mx_per_S2 * _u[1], // X Component
-						My_per_S1 * _u[0] + My_per_S2 * _u[1], // Y Component
-						// 0.f);
-						Mz_per_UR*_u[2] + Mz_per_LR*_u[3] + Mz_per_S1*_u[0] + Mz_per_S2*_u[1]); // Z Component
-		//);
+		_Mt_B = Vector3f(
+    		Mx_per_S1 * pwm_0 * 0.f + Mx_per_S2 * pwm_1 * 0.f,
+    		My_per_S1 * pwm_0 * 0.f+ My_per_S2 * pwm_1 * 0.f,
+    		(Mz_per_UR * pwm_2 + Mz_per_LR * pwm_3 + Mz_per_S1 * pwm_0 + Mz_per_S2 * pwm_1) * 0.f
+		);
+
+// 		dt_cumulative += dt;
+// 		int current_second = static_cast<int>(dt_cumulative);
+
+// 		if ((dt_cumulative > time_threshold) && (current_second > last_printed_second)) {
+// 			last_printed_second = current_second;
+
+// 		PX4_INFO("PWM INPUTS INTO FORCE AND MOMENT EQUATIONS:");
+// 		for (int i = 0; i < 4; i++) {
+// 		PX4_INFO("  Channel %u: %.4f", i, static_cast<double>(_u[i]));
+// 		}
+// }
+
+
+		// _T_B = Vector3f(Fx_per_S1*_u[0] + Fx_per_S2*_u[1], // X Component
+		// Fy_per_S1*_u[0] + Fy_per_S2*_u[1], // Y Component
+		// + Fz_per_UR*_u[2] + Fz_per_LR*_u[3] + Fz_per_S1*_u[0] + Fz_per_S2*_u[1] // Z Component
+		// );
+
+		// _Mt_B = Vector3f(Mx_per_S1 * _u[0] + Mx_per_S2 * _u[1], // X Component
+		// 				My_per_S1 * _u[0] + My_per_S2 * _u[1], // Y Component
+		// 				// 0.f);
+		// 				Mz_per_UR*_u[2] + Mz_per_LR*_u[3] + Mz_per_S1*_u[0] + Mz_per_S2*_u[1]); // Z Component
+		// //);
 
 		generate_fw_aerodynamics(0, 0, 0, 0);
 		// _Fa_E = Vector3f(0.0f,0.0f,0.0f);   // Setting the Aerodynamic Drag Force to Zero (Initial Test Case only - Refine later)
@@ -486,7 +552,8 @@ void Sih::equations_of_motion(const float dt)
 	const Vector3f coriolis_acceleration_E = -2.f * Vector3f(0.f, 0.f, CONSTANTS_EARTH_SPIN_RATE).cross(_v_E);
 
 	const Vector3f weight_E = _MASS * gravity_acceleration_E;
-	Vector3f sum_of_forces_E = _Fa_E + _q_E.rotateVector(_T_B) + weight_E + 0.942f;
+	const Vector3f Fz_Hover = Vector3f(0.f,0.f,0.942f);
+	Vector3f sum_of_forces_E = _Fa_E + _q_E.rotateVector(_T_B) + weight_E + Fz_Hover;
 
 	// fake ground, avoid free fall
 	const float force_down = Vector3f(_R_N2E.transpose() * sum_of_forces_E)(2);
@@ -811,15 +878,15 @@ int Sih::print_status()
 	PX4_INFO("Actuator Signals Read in Firmware");
 	Vector<float, 8> u = Vector<float, 8>(_u);
 	u.transpose().print();
-	// PX4_INFO("Sum of forces NED (N)");
-	// (_R_N2E.transpose() * _Fa_E).print();
+	PX4_INFO("Sum of forces NED (N)");
+	(_R_N2E.transpose() * _Fa_E).print();
 	// Forces generated by Thrusters
-	// PX4_INFO("Forces Generated By Thrusters (N)");
-	// _q_E.rotateVector(_T_B).print();
+	PX4_INFO("Forces Generated By Thrusters (N)");
+	_q_E.rotateVector(_T_B).print();
 	// PX4_INFO("Aerodynamic moments body frame (Nm)");
 	// _Ma_B.print();
-	// PX4_INFO("Moments Generated by Thrusters (Nm)");
-	// _Mt_B.print();
+	PX4_INFO("Moments Generated by Thrusters (Nm)");
+	_Mt_B.print();
 	return 0;
 }
 

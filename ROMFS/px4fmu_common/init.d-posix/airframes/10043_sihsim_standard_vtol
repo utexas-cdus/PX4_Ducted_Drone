@@ -98,8 +98,8 @@
 
 
 
-##### DUCTED DRONE SECTION START 
-### COMMENT OR UNCOMMENT AS NEEDED TO HIJACK SIM 
+##### DUCTED DRONE SECTION START
+### COMMENT OR UNCOMMENT AS NEEDED TO HIJACK SIM
 
 #!/bin/sh
 #
@@ -132,7 +132,7 @@ param set-default SENS_EN_ARSPDSIM 1
 
 param set-default EKF2_GPS_DELAY 0
 
-# SET CONTORLLER TYPE AND PID GAINS 
+# SET CONTORLLER TYPE AND PID GAINS
 param set-default VT_TYPE 2
 param set-default MPC_MAN_Y_MAX 60
 param set-default MC_PITCH_P 0.5
@@ -146,7 +146,7 @@ param set-default MC_ROLLRATE_K 1.0
 # ROLL CONTORLLER PARAMS
 param set-default MC_ROLL_P 3.0
 
-# CONTROL ALLOCATION PARAMS 
+# CONTROL ALLOCATION PARAMS
 param set-default CA_AIRFRAME 16
 param set-default CA_ROTOR_COUNT 2
 # COMMENTING OUT TO HIJACK FILE FOR DUCTED DRONE
@@ -180,14 +180,14 @@ param set-default FW_AIRSPD_MIN 7
 param set-default FW_AIRSPD_TRIM 10
 param set-default FW_AIRSPD_MAX 12
 
-param set-default PWM_MAIN_FUNC1 101 
+param set-default PWM_MAIN_FUNC1 101
 param set-default PWM_MAIN_FUNC2 102
 param set-default PWM_MAIN_FUNC3 201
 param set-default PWM_MAIN_FUNC4 202
 
 param set-default MAV_TYPE 22
 
-#Ducted Drone Params 
+#Ducted Drone Params
 #Rotor Params
 param set-default CA_RT0_TRQ_R 0.00
 param set-default CA_RT0_TRQ_P 0.00
@@ -203,24 +203,24 @@ param set-default CA_RT1_TX 0.00
 param set-default CA_RT1_TY 0.00
 param set-default CA_RT1_TZ 0.935
 
-# Servo Params 
+# Servo Params
 param set-default CA_SV_CS_COUNT 2
 param set-default CA_SV_CS0_TYPE 1
-param set-default CA_SV_CS0_TRQ_R 0.54
-param set-default CA_SV_CS0_TRQ_P 0.59
+param set-default CA_SV_CS0_TRQ_R -1.0
+param set-default CA_SV_CS0_TRQ_P 0.41
 param set-default CA_SV_CS0_TRQ_Y 0.00
 param set-default CA_SV_CS0_TX 0.36
 param set-default CA_SV_CS0_TY -0.69
 param set-default CA_SV_CS0_TZ 0.00
 
 param set-default CA_SV_CS1_TYPE 2
-param set-default CA_SV_CS1_TRQ_R 0.82
-param set-default CA_SV_CS1_TRQ_P -1.00
+param set-default CA_SV_CS1_TRQ_R 0.38
+param set-default CA_SV_CS1_TRQ_P 0.67
 param set-default CA_SV_CS1_TRQ_Y 0.00
 param set-default CA_SV_CS1_TX -1.00
 param set-default CA_SV_CS1_TY -0.38
 param set-default CA_SV_CS1_TZ 0.00
-# End Ducted Drone Params 
+# End Ducted Drone Params
 
 # set SYS_HITL to 2 to start the SIH and avoid sensors startup
 # param set-default SYS_HITL 2
@@ -245,7 +245,7 @@ param set SIH_L_ROLL 0.2
 # sih as standard vtol
 param set SIH_VEHICLE_TYPE 3
 
-# ROTOR POSITIONS 
+# ROTOR POSITIONS
 param set-default CA_ROTOR0_PX 0.00
 param set-default CA_ROTOR0_PY 0.00
 param set-default CA_ROTOR1_PX 0.00
@@ -253,4 +253,4 @@ param set-default CA_ROTOR1_PY 0.00
 
 
 
-##### DUCTED DRONE SECTION END 
+##### DUCTED DRONE SECTION END
