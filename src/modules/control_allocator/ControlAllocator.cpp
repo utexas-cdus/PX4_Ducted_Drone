@@ -45,6 +45,8 @@
 #include <circuit_breaker/circuit_breaker.h>
 #include <mathlib/math/Limits.hpp>
 #include <mathlib/math/Functions.hpp>
+#include <stdio.h>
+
 
 using namespace matrix;
 using namespace time_literals;
@@ -465,8 +467,8 @@ ControlAllocator::Run()
 
 	if ((current_second > time_threshold) && (current_second > last_printed_second)){
 	last_printed_second = current_second;
-		// PX4_INFO("FIRMWARE VALUES");
-		// print_status();
+		PX4_INFO("FIRMWARE VALUES");
+		print_status();
 	}
 
 	// Publish status at limited rate, as it's somewhat expensive and we use it for slower dynamics
@@ -732,6 +734,8 @@ ControlAllocator::publish_actuator_controls()
 		_actuator_servos_pub.publish(actuator_servos);
 	}
 	_last_actuator_servos = actuator_servos;
+	log_actuator_signals_sitl(actuator_motors, actuator_servos);
+
 }
 
 void
@@ -847,14 +851,14 @@ int ControlAllocator::print_status()
 	// PX4_INFO("The setpoint Z Thrust is: %.4f", static_cast<double>(c(5)));
 
 	// Print current effectiveness matrix
-	// for (int i = 0; i < _num_control_allocation; ++i) {
-	// 	// const ActuatorEffectiveness::EffectivenessMatrix &effectiveness = _control_allocation[i]->getEffectivenessMatrix();
+	 for (int i = 0; i < _num_control_allocation; ++i) {
+		const ActuatorEffectiveness::EffectivenessMatrix &effectiveness = _control_allocation[i]->getEffectivenessMatrix();
 
 	// 	if (_num_control_allocation > 1) {
 	// 		PX4_INFO("Instance: %i", i);
 	// 	}
-	// 	//PX4_INFO("  Effectiveness =");
-	// 	//effectiveness.print();
+	PX4_INFO("Effectiveness =");
+	effectiveness.print();
 	// 	//PX4_INFO("  Effectiveness.T =");
 	// 	//effectiveness.T().print();
 	// 	// PX4_INFO("  minimum =");
@@ -869,9 +873,9 @@ int ControlAllocator::print_status()
 	// 	}
 	// }
 
-	for (int i = 0; i < _num_control_allocation; ++i) {
-	const auto &actuator_sp = _control_allocation[i]->getActuatorSetpoint();
-	PX4_INFO("Actuator Setpoint (u) Matrix %d:", i);
+	for (int sp_i = 0; sp_i < _num_control_allocation; ++sp_i) {
+	const auto &actuator_sp = _control_allocation[sp_i]->getActuatorSetpoint();
+	PX4_INFO("Actuator Setpoint (u) Matrix %d:", sp_i);
 	for (size_t j = 0; j < actuator_sp.size(); ++j) {
 		if (PX4_ISFINITE(actuator_sp(j))) {
 			PX4_INFO("  u[%d] = %.4f", static_cast<int>(j), static_cast<double>(actuator_sp(j)));
@@ -886,9 +890,49 @@ int ControlAllocator::print_status()
 
 	// Print perf
 	perf_print_counter(_loop_perf);
+}
+return 0;
+}
+// Method for outputting Actuator Controls to Log File 
+void ControlAllocator::log_actuator_signals_sitl(const actuator_motors_s &motors, const actuator_servos_s &servos)
+{
+	static FILE *fp = nullptr;
 
-	return 0;
+	if (!fp) {
+		fp = fopen("/tmp/control_allocator_signals.csv", "w");
 
+		if (!fp) {
+			PX4_ERR("Failed to open control_allocator_signals.csv");
+			return;
+		}
+
+		// Write header
+		fprintf(fp, "timestamp_us");
+
+		for (int i = 0; i < actuator_motors_s::NUM_CONTROLS; ++i) {
+			fprintf(fp, ",motor[%d]", i);
+		}
+
+		for (int i = 0; i < actuator_servos_s::NUM_CONTROLS; ++i) {
+			fprintf(fp, ",servo[%d]", i);
+		}
+
+		fprintf(fp, "\n");
+	}
+
+	// Write values
+	fprintf(fp, "%llu", static_cast<unsigned long long>(hrt_absolute_time()));
+
+	for (int i = 0; i < actuator_motors_s::NUM_CONTROLS; ++i) {
+		fprintf(fp, ",%.6f", static_cast<double>(motors.control[i]));
+	}
+
+	for (int i = 0; i < actuator_servos_s::NUM_CONTROLS; ++i) {
+		fprintf(fp, ",%.6f", static_cast<double>(servos.control[i]));
+	}
+
+	fprintf(fp, "\n");
+	fflush(fp);
 }
 
 int ControlAllocator::custom_command(int argc, char *argv[])

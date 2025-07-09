@@ -147,7 +147,7 @@
 	{
 		for (int i = 0; i < _count; i++) {
 			// int actuator_idx = configuration.addActuator(ActuatorType::SERVOS, _params[i].torque, _params[i].thrust);
-			(void)configuration.addActuator(ActuatorType::SERVOS, _params[i].torque, _params[i].thrust);
+			(void)configuration.addActuator(ActuatorType::MOTORS, _params[i].torque, _params[i].thrust);
 		}
 
 		return true;

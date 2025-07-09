@@ -140,6 +140,9 @@ private:
 
 	void publish_actuator_controls();
 
+	void log_actuator_signals_sitl(const actuator_motors_s &motors, const actuator_servos_s &servos);
+
+
 	AllocationMethod _allocation_method_id{AllocationMethod::NONE};
 	ControlAllocation *_control_allocation[ActuatorEffectiveness::MAX_NUM_MATRICES] {}; 	///< class for control allocation calculations
 	int _num_control_allocation{0};
