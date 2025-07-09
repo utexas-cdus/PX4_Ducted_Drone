@@ -841,14 +841,14 @@ int ControlAllocator::print_status()
 
 	// Print current Set point commands for Thrust and Torque
 	// matrix::Vector<float, NUM_AXES> c_print[ActuatorEffectiveness::MAX_NUM_MATRICES];
-	// const matrix::Vector<float, NUM_AXES> &c = _control_allocation[0]->getControlSetpoint();
+	const matrix::Vector<float, NUM_AXES> &c = _control_allocation[0]->getControlSetpoint();
 
-	// PX4_INFO("The setpoint Roll Torque is: %.4f", static_cast<double>(c(0)));
-	// PX4_INFO("The setpoint Pitch Torque is: %.4f", static_cast<double>(c(1)));
-	// PX4_INFO("The setpoint Yaw Torque is: %.4f", static_cast<double>(c(2)));
-	// PX4_INFO("The setpoint X Thrust is: %.4f", static_cast<double>(c(3)));
-	// PX4_INFO("The setpoint Y Thrust is: %.4f", static_cast<double>(c(4)));
-	// PX4_INFO("The setpoint Z Thrust is: %.4f", static_cast<double>(c(5)));
+	PX4_INFO("The setpoint Roll Torque is: %.4f", static_cast<double>(c(0)));
+	PX4_INFO("The setpoint Pitch Torque is: %.4f", static_cast<double>(c(1)));
+	PX4_INFO("The setpoint Yaw Torque is: %.4f", static_cast<double>(c(2)));
+	PX4_INFO("The setpoint X Thrust is: %.4f", static_cast<double>(c(3)));
+	PX4_INFO("The setpoint Y Thrust is: %.4f", static_cast<double>(c(4)));
+	PX4_INFO("The setpoint Z Thrust is: %.4f", static_cast<double>(c(5)));
 
 	// Print current effectiveness matrix
 	 for (int i = 0; i < _num_control_allocation; ++i) {

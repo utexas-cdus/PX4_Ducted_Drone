@@ -118,10 +118,11 @@ public:
 private:
 	void parameters_updated();
 
-	void log_actuator_inputs(const actuator_outputs_s &actuators_out, const float u[actuator_outputs_s::NUM_ACTUATOR_OUTPUTS]);
+	void log_actuator_inputs(const actuator_outputs_s &actuators_out,
+                         const float u[actuator_outputs_s::NUM_ACTUATOR_OUTPUTS],
+                         const float pwm[actuator_outputs_s::NUM_ACTUATOR_OUTPUTS],
+                         const float del_pwm[actuator_outputs_s::NUM_ACTUATOR_OUTPUTS]);
 	
-
-
 	// simulated sensors
 	PX4Accelerometer _px4_accel{1310988}; // 1310988: DRV_IMU_DEVTYPE_SIM, BUS: 1, ADDR: 1, TYPE: SIMULATION
 	PX4Gyroscope     _px4_gyro{1310988};  // 1310988: DRV_IMU_DEVTYPE_SIM, BUS: 1, ADDR: 1, TYPE: SIMULATION
@@ -200,6 +201,9 @@ private:
 	hrt_abstime _airspeed_time{0};
 	hrt_abstime _dist_snsr_time{0};
 
+	actuator_outputs_s _last_actuator_output_msg{};
+
+
 	bool        _grounded{true};// whether the vehicle is on the ground
 
 	matrix::Vector3f    _T_B{};           // thrust force in body frame [N]
@@ -226,8 +230,8 @@ private:
 
 	// START CUSTOM DUCTED DRONE PARAMS
 	// Rotors
-	float Fz_per_UR = 0.01037; // Upper Rotor (UR) contribution to Fz (Vertical Force)
-	float Fz_per_LR = 0.00967; // Upper Rotor (LR) contribution to Fz (Vertical Force)
+	float Fz_per_UR = -0.01037; // Upper Rotor (UR) contribution to Fz (Vertical Force)
+	float Fz_per_LR = -0.00967; // Upper Rotor (LR) contribution to Fz (Vertical Force)
 	float Mz_per_UR = 0.00030; // Upper Rotor (UR) contribution to Mz (Yaw Moment)
 	float Mz_per_LR = -0.00030; // Lower Rotor (LR) contribution to Mz (Yaw Moment)
 	// Servo 1

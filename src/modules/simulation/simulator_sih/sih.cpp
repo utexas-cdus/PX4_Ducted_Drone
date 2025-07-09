@@ -328,7 +328,6 @@ void Sih::read_motors(const float dt)
 				_u[i] = _u[i] + dt / _T_TAU * (u_sp - _u[i]); // first order transfer function with time constant tau
 				// _u[i] = u_sp;  // Direct mapping — no lag
 			}
-			log_actuator_inputs(actuators_out, _u);
 		}
 
 		// // // DEBUGGING - COMMENT OUT AS NEEDED
@@ -345,6 +344,7 @@ void Sih::read_motors(const float dt)
 		// }
 		// }
 	}
+	_last_actuator_output_msg = actuators_out;
 }
 
 void Sih::generate_force_and_torques()
@@ -418,45 +418,61 @@ void Sih::generate_force_and_torques()
 
 
 		// Define minimum threshold for a valid command (tune as needed)
-		const float MIN_VALID_COMMAND = 0.05f;  // e.g. anything under 5% of full command is treated as noise
+		const float MIN_VALID_COMMAND = 0.01f;  // e.g. anything under 1% of full command is treated as noise
 
 		// Initialize PWM values with a safe default (e.g. neutral or off)
 		float pwm_0 = 0.f;
 		float pwm_1 = 0.f;
 		float pwm_2 = 0.f;
 		float pwm_3 = 0.f;
+	
+		float delPWM_0 = 0.f;
+		float delPWM_1 = 0.f;
+		float delPWM_2 = 0.f;
+		float delPWM_3 = 0.f;
 
 		// Scale and constrain only if input signal is significant
 		if (fabsf(_u[0]) > MIN_VALID_COMMAND) {
-			pwm_0 = math::constrain(_u[0] * 200.f + 1500.f, 1300.f, 1700.f);
-			pwm_0 = pwm_0 - 1500.f;
+			pwm_0  = _u[0] * 1000.f + 1600.f;
+			delPWM_0 = math::constrain(pwm_0, 1000.f, 2000.f);
+			delPWM_0 = delPWM_0 - 1000.f;
 		}
 
 		if (fabsf(_u[1]) > MIN_VALID_COMMAND) {
-			pwm_1 = math::constrain(_u[1] * 200.f + 1500.f, 1300.f, 1700.f);
-			pwm_1 = pwm_1 - 1500.f;
+			pwm_1  = _u[1] * 1000.f + 1600.f;
+			delPWM_1 = math::constrain(pwm_1, 1000.f, 2000.f);
+			delPWM_1 = delPWM_1 - 1000.f;
 
 		}
 
 		if (fabsf(_u[2]) > MIN_VALID_COMMAND) {
-			pwm_2 = math::constrain(_u[2] * 1000.f, 1000.f, 2000.f);
+			pwm_2  = _u[2] * 200.f + 1500.f;
+			delPWM_2 = math::constrain(pwm_2, 1300.f, 1700.f);
+			delPWM_2 = delPWM_2 - 1500.f;
 		}
 
 		if (fabsf(_u[3]) > MIN_VALID_COMMAND) {
-			pwm_3 = math::constrain(_u[3] * 1000.f, 1000.f, 2000.f);
+			pwm_3  = _u[3] * 200.f + 1500.f;
+			delPWM_3 = math::constrain(pwm_3, 1300.f, 1700.f);
+			delPWM_3 = delPWM_3 - 1500.f;
 		}
+
+		float pwm_arr[actuator_outputs_s::NUM_ACTUATOR_OUTPUTS] = {pwm_0, pwm_1, pwm_2, pwm_3};
+		float delPWM_arr[actuator_outputs_s::NUM_ACTUATOR_OUTPUTS] = {delPWM_0, delPWM_1, delPWM_2, delPWM_3};
+
+		log_actuator_inputs(_last_actuator_output_msg, _u, pwm_arr, delPWM_arr);
 
 
 		_T_B = Vector3f(
-    		Fx_per_S1 * pwm_0 * 1.f + Fx_per_S2 * pwm_1 * 1.f,
-    		Fy_per_S1 * pwm_0 * 1.f + Fy_per_S2 * pwm_1 * 1.f,
-    		Fz_per_UR * pwm_2 * 10.f + Fz_per_LR * pwm_3 * 10.f  + Fz_per_S1 * pwm_0 + Fz_per_S2 * pwm_1
+    		Fx_per_S1 * delPWM_0 * 1.f + Fx_per_S2 * delPWM_1 * 1.f,
+    		Fy_per_S1 * delPWM_0 * 1.f + Fy_per_S2 * delPWM_1 * 1.f,
+    		Fz_per_UR * delPWM_2 * 1.f + Fz_per_LR * delPWM_3 * 1.f  + Fz_per_S1 * delPWM_0 * 1.f + Fz_per_S2 * delPWM_1 * 1.f
 		);
 
 		_Mt_B = Vector3f(
-    		Mx_per_S1 * pwm_0 * 0.f + Mx_per_S2 * pwm_1 * 0.f,
-    		My_per_S1 * pwm_0 * 0.f+ My_per_S2 * pwm_1 * 0.f,
-    		(Mz_per_UR * pwm_2 + Mz_per_LR * pwm_3 + Mz_per_S1 * pwm_0 + Mz_per_S2 * pwm_1) * 0.f
+    		Mx_per_S1 * delPWM_0 * 1.f + Mx_per_S2 * delPWM_1 * 1.f,
+    		My_per_S1 * delPWM_0 * 1.f + My_per_S2 * delPWM_1 * 1.f,
+    		(Mz_per_UR * delPWM_2 + Mz_per_LR * delPWM_3 + Mz_per_S1 * delPWM_0 + Mz_per_S2 * delPWM_1) * 1.f
 		);
 
 // 		dt_cumulative += dt;
@@ -896,12 +912,15 @@ int Sih::print_status()
 	return 0;
 }
 
-void Sih::log_actuator_inputs(const actuator_outputs_s &actuators_out, const float u[actuator_outputs_s::NUM_ACTUATOR_OUTPUTS])
+void Sih::log_actuator_inputs(const actuator_outputs_s &actuators_out,
+                              const float u[actuator_outputs_s::NUM_ACTUATOR_OUTPUTS],
+                              const float pwm[actuator_outputs_s::NUM_ACTUATOR_OUTPUTS],
+                              const float del_pwm[actuator_outputs_s::NUM_ACTUATOR_OUTPUTS])
 {
 	static FILE *fp = nullptr;
 
 	if (!fp) {
-		fp = fopen("/tmp/sih_actuator_inputs.csv", "w"); // Overwrites on each run
+		fp = fopen("/tmp/sih_actuator_inputs.csv", "w");
 		if (!fp) {
 			PX4_ERR("Failed to open /tmp/sih_actuator_inputs.csv");
 			return;
@@ -914,7 +933,15 @@ void Sih::log_actuator_inputs(const actuator_outputs_s &actuators_out, const flo
 		}
 
 		for (int i = 0; i < actuator_outputs_s::NUM_ACTUATOR_OUTPUTS; ++i) {
-			fprintf(fp, ",_u[%d]", i);
+			fprintf(fp, ",u[%d]", i);
+		}
+
+		for (int i = 0; i < actuator_outputs_s::NUM_ACTUATOR_OUTPUTS; ++i) {
+			fprintf(fp, ",pwm[%d]", i);
+		}
+
+		for (int i = 0; i < actuator_outputs_s::NUM_ACTUATOR_OUTPUTS; ++i) {
+			fprintf(fp, ",delPWM[%d]", i);
 		}
 
 		fprintf(fp, "\n");
@@ -928,6 +955,14 @@ void Sih::log_actuator_inputs(const actuator_outputs_s &actuators_out, const flo
 
 	for (int i = 0; i < actuator_outputs_s::NUM_ACTUATOR_OUTPUTS; ++i) {
 		fprintf(fp, ",%.6f", static_cast<double>(u[i]));
+	}
+
+	for (int i = 0; i < actuator_outputs_s::NUM_ACTUATOR_OUTPUTS; ++i) {
+		fprintf(fp, ",%.6f", static_cast<double>(pwm[i]));
+	}
+
+	for (int i = 0; i < actuator_outputs_s::NUM_ACTUATOR_OUTPUTS; ++i) {
+		fprintf(fp, ",%.6f", static_cast<double>(del_pwm[i]));
 	}
 
 	fprintf(fp, "\n");
