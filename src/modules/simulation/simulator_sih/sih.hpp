@@ -150,6 +150,9 @@ private:
 	static constexpr float RP = 0.1f; 	// radius of the propeller [m]
 	static constexpr float FLAP_MAX = M_PI_F / 12.0f; // 15 deg, maximum control surface deflection
 
+	matrix::Vector3f sum_of_forces_E; // Total force in ECEF frame
+
+
 	void init_variables();
 
 	// read the motor signals outputted from the mixer
