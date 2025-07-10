@@ -21,45 +21,52 @@
 
 set SYS_AUTOSTART 30000
 
-# Set the Airframe type - This determines the Actuator Effectiveness Matrix and CA Method used 
-param set-default CA_AIRFRAME 16 
+# Set the Airframe type - This determines the Actuator Effectiveness Matrix and CA Method used
+param set-default CA_AIRFRAME 16
 param set-default CA_METHOD 1
 
 
 # Rotor Params
+# Converting from delta force per delta PWM to force per normalized signal
+# PWM range: 1000-2000 (1000 units), Normalized range: -1 to 1 (2 units)
+# Conversion factor: 1000/2 = 500 for rotors, 200/2 = 100 for servos
+param set-default CA_ROTOR_COUNT 2
+
+# Upper Rotor (UR) - Motor1 Left Duct
 param set-default CA_RT0_TRQ_R: 0.00
 param set-default CA_RT0_TRQ_P: 0.00
-param set-default CA_RT0_TRQ_Y: 0.00 
+param set-default CA_RT0_TRQ_Y: -0.15  # -0.00030 * 500 = -0.15 Nm per normalized unit
 param set-default CA_RT0_TX: 0.00
 param set-default CA_RT0_TY: 0.00
-param set-default CA_RT0_TZ: 0.00
+param set-default CA_RT0_TZ: -5.185  # -0.01037 * 500 = -5.185 N per normalized unit
 
+# Lower Rotor (LR) - Motor2 Right Duct
 param set-default CA_RT1_TRQ_R: 0.00
 param set-default CA_RT1_TRQ_P: 0.00
-param set-default CA_RT1_TRQ_Y: 0.00 
+param set-default CA_RT1_TRQ_Y: 0.15  # 0.00030 * 500 = 0.15 Nm per normalized unit
 param set-default CA_RT1_TX: 0.00
 param set-default CA_RT1_TY: 0.00
-param set-default CA_RT1_TZ: 0.00
+param set-default CA_RT1_TZ: -4.835  # -0.00967 * 500 = -4.835 N per normalized unit
 
-# Servo Params 
+# Servo Params
 param set-default CA_SV_CS_COUNT 2
 param set-default CA_SV_CS0_TYPE 1
-param set-default CA_SV_CS0_TRQ_R 0.00
-param set-default CA_SV_CS0_TRQ_P 0.00
+param set-default CA_SV_CS0_TRQ_R 0.038  # 0.00038 * 100 = 0.038 Nm per normalized unit
+param set-default CA_SV_CS0_TRQ_P 0.072  # 0.00072 * 100 = 0.072 Nm per normalized unit
 param set-default CA_SV_CS0_TRQ_Y 0.00
-param set-default CA_SV_CS0_TX 0.00
-param set-default CA_SV_CS0_TY 0.00
+param set-default CA_SV_CS0_TX -0.185  # -0.00185 * 100 = -0.185 N per normalized unit
+param set-default CA_SV_CS0_TY 0.199  # 0.00199 * 100 = 0.199 N per normalized unit
 param set-default CA_SV_CS0_TZ 0.00
 
 param set-default CA_SV_CS1_TYPE 2
-param set-default CA_SV_CS1_TRQ_R 0.00
-param set-default CA_SV_CS1_TRQ_P 0.00
+param set-default CA_SV_CS1_TRQ_R -0.105  # -0.00105 * 100 = -0.105 Nm per normalized unit
+param set-default CA_SV_CS1_TRQ_P 0.040  # 0.00040 * 100 = 0.040 Nm per normalized unit
 param set-default CA_SV_CS1_TRQ_Y 0.00
-param set-default CA_SV_CS1_TX 0.00
-param set-default CA_SV_CS1_TY 0.00
+param set-default CA_SV_CS1_TX -0.280  # -0.00280 * 100 = -0.280 N per normalized unit
+param set-default CA_SV_CS1_TY -0.340  # -0.00340 * 100 = -0.340 N per normalized unit
 param set-default CA_SV_CS1_TZ 0.00
 
-# ROTOR POSITIONS 
+# ROTOR POSITIONS
 param set-default CA_ROTOR0_PX 0.00
 param set-default CA_ROTOR0_PY 0.00
 param set-default CA_ROTOR1_PX 0.00
@@ -77,5 +84,5 @@ set MIXER quad_x
 set MIXER_AUX vtol_AAERT
 set PWM_OUT 1234
 
-# Software-in-Hardware (SIH) Simulation 
+# Software-in-Hardware (SIH) Simulation
 param set SIH_VEHICLE_TYPE 3 # Setting custom Number for Ducted Drone

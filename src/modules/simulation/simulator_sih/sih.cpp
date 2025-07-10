@@ -221,8 +221,8 @@ void Sih::sensor_step()
 
 	if ((dt_cumulative > time_threshold) && (current_second > last_printed_second)){
 		last_printed_second = current_second;
-		PX4_INFO("SIMULATION VALUES");
-		print_status();
+		//PX4_INFO("SIMULATION VALUES");
+		//print_status();
 	}
 
 	equations_of_motion(dt);

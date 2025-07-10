@@ -146,6 +146,36 @@ param set-default MC_ROLLRATE_K 1.0
 # ROLL CONTORLLER PARAMS
 param set-default MC_ROLL_P 3.0
 
+# PITCH RATE CONTROLLER PARAMS - TUNED FOR BETTER PITCH TRACKING
+param set-default MC_PITCHRATE_P 0.8
+param set-default MC_PITCHRATE_I 0.1
+param set-default MC_PITCHRATE_D 0.02
+param set-default MC_PITCHRATE_K 1.0
+
+# PITCH CONTROLLER PARAMS - TUNED FOR BETTER PITCH TRACKING
+param set-default MC_PITCH_P 4.0
+param set-default MC_PITCH_I 0.1
+param set-default MC_PITCH_D 0.02
+
+# YAW RATE CONTROLLER PARAMS
+param set-default MC_YAWRATE_P 0.6
+param set-default MC_YAWRATE_I 0.1
+param set-default MC_YAWRATE_D 0.0
+param set-default MC_YAWRATE_K 1.0
+
+# YAW CONTROLLER PARAMS
+param set-default MC_YAW_P 2.0
+param set-default MC_YAW_I 0.1
+param set-default MC_YAW_D 0.0
+
+# VELOCITY CONTROLLER PARAMS
+param set-default MPC_XY_VEL_P 1.0
+param set-default MPC_XY_VEL_I 0.1
+param set-default MPC_XY_VEL_D 0.0
+param set-default MPC_Z_VEL_P 1.0
+param set-default MPC_Z_VEL_I 0.1
+param set-default MPC_Z_VEL_D 0.0
+
 # CONTROL ALLOCATION PARAMS
 param set-default CA_AIRFRAME 16
 param set-default CA_ROTOR_COUNT 2
@@ -187,40 +217,53 @@ param set-default PWM_MAIN_FUNC4 202
 
 param set-default MAV_TYPE 22
 
-#Ducted Drone Params
-#Rotor Params
+#Ducted Drone Params - L2 NORM NORMALIZED VALUES
+# Control Allocation Matrix (4 actuators × 6 outputs): [Fx, Fy, Fz, Mx, My, Mz]
+# Original values from SIH dynamics:
+# UR: [0, 0, -0.01037, 0, 0, -0.00030]
+# LR: [0, 0, -0.00967, 0, 0, 0.00030]
+# S1: [-0.00185, 0.00199, 0, 0.00038, 0.00072, 0]
+# S2: [-0.00280, -0.00340, 0, -0.00105, 0.00040, 0]
+
+# L2 norm calculation:
+# ||UR|| = sqrt(0^2 + 0^2 + 0.01037^2 + 0^2 + 0^2 + 0.00030^2) = 0.01037
+# ||LR|| = sqrt(0^2 + 0^2 + 0.00967^2 + 0^2 + 0^2 + 0.00030^2) = 0.00968
+# ||S1|| = sqrt(0.00185^2 + 0.00199^2 + 0^2 + 0.00038^2 + 0.00072^2 + 0^2) = 0.00312
+# ||S2|| = sqrt(0.00280^2 + 0.00340^2 + 0^2 + 0.00105^2 + 0.00040^2 + 0^2) = 0.00454
+
+#Rotor Params - L2 Normalized
 param set-default CA_RT0_TRQ_R 0.00
 param set-default CA_RT0_TRQ_P 0.00
-param set-default CA_RT0_TRQ_Y 1.00
+param set-default CA_RT0_TRQ_Y -0.0289  # -0.00030 / 0.01037
 param set-default CA_RT0_TX 0.00
 param set-default CA_RT0_TY 0.00
-param set-default CA_RT0_TZ -1.00
+param set-default CA_RT0_TZ -1.00  # -0.01037 / 0.01037
 
 param set-default CA_RT1_TRQ_R 0.00
 param set-default CA_RT1_TRQ_P 0.00
-param set-default CA_RT1_TRQ_Y -1.00
+param set-default CA_RT1_TRQ_Y 0.0310  # 0.00030 / 0.00968
 param set-default CA_RT1_TX 0.00
 param set-default CA_RT1_TY 0.00
-param set-default CA_RT1_TZ -0.935
+param set-default CA_RT1_TZ -1.00  # -0.00967 / 0.00968
 
-# Servo Params
+# Servo Params - L2 Normalized
 param set-default CA_SV_CS_COUNT 2
 param set-default CA_SV_CS0_TYPE 1
-param set-default CA_SV_CS0_TRQ_R 0.47
-param set-default CA_SV_CS0_TRQ_P 0.88
+param set-default CA_SV_CS0_TRQ_R 0.1218  # 0.00038 / 0.00312
+param set-default CA_SV_CS0_TRQ_P 0.2308  # 0.00072 / 0.00312
 param set-default CA_SV_CS0_TRQ_Y 0.00
-param set-default CA_SV_CS0_TX 0.36
-param set-default CA_SV_CS0_TY -0.69
+param set-default CA_SV_CS0_TX -0.5929  # -0.00185 / 0.00312
+param set-default CA_SV_CS0_TY 0.6378  # 0.00199 / 0.00312
 param set-default CA_SV_CS0_TZ 0.00
 
 param set-default CA_SV_CS1_TYPE 2
-param set-default CA_SV_CS1_TRQ_R -0.93
-param set-default CA_SV_CS1_TRQ_P 0.36
+param set-default CA_SV_CS1_TRQ_R -0.2313  # -0.00105 / 0.00454
+param set-default CA_SV_CS1_TRQ_P 0.0881  # 0.00040 / 0.00454
 param set-default CA_SV_CS1_TRQ_Y 0.00
-param set-default CA_SV_CS1_TX -1.00
-param set-default CA_SV_CS1_TY -0.38
+param set-default CA_SV_CS1_TX -0.6167  # -0.00280 / 0.00454
+param set-default CA_SV_CS1_TY -0.7491  # -0.00340 / 0.00454
 param set-default CA_SV_CS1_TZ 0.00
-# End Ducted Drone Params
+# End Ducted Drone Params - L2 NORM NORMALIZED
 
 # set SYS_HITL to 2 to start the SIH and avoid sensors startup
 # param set-default SYS_HITL 2

@@ -467,8 +467,8 @@ ControlAllocator::Run()
 
 	if ((current_second > time_threshold) && (current_second > last_printed_second)){
 	last_printed_second = current_second;
-		PX4_INFO("FIRMWARE VALUES");
-		print_status();
+		// PX4_INFO("FIRMWARE VALUES");
+		// print_status();
 	}
 
 	// Publish status at limited rate, as it's somewhat expensive and we use it for slower dynamics
