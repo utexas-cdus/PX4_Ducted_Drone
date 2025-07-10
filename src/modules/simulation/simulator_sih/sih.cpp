@@ -418,71 +418,52 @@ void Sih::generate_force_and_torques()
 
 
 		// Define minimum threshold for a valid command (tune as needed)
-		const float MIN_VALID_COMMAND = 0.01f;  // e.g. anything under 1% of full command is treated as noise
+		const float MIN_VALID_COMMAND = 0.05f;  // e.g. anything under 5% of full command is treated as noise
 
 		// Initialize PWM values with a safe default (e.g. neutral or off)
 		float pwm_0 = 0.f;
 		float pwm_1 = 0.f;
 		float pwm_2 = 0.f;
 		float pwm_3 = 0.f;
-	
+
 		float delPWM_0 = 0.f;
 		float delPWM_1 = 0.f;
 		float delPWM_2 = 0.f;
 		float delPWM_3 = 0.f;
 
-		// // Scale and constrain only if input signal is significant
-		// if (fabsf(_u[0]) > MIN_VALID_COMMAND) {
-		// 	pwm_0  = _u[0] * 200.f + 1500.f;
-		// 	delPWM_0 = math::constrain(pwm_0, 1300.f, 1700.f);
-		// 	delPWM_0 = delPWM_0 - 1500.f;
-		// }
-
-		// if (fabsf(_u[1]) > MIN_VALID_COMMAND) {
-		// 	pwm_1  = _u[1] * 200.f + 1500.f;
-		// 	delPWM_1 = math::constrain(pwm_1, 1300.f, 1700.f);
-		// 	delPWM_1 = delPWM_1 - 1500.f;
-
-		// }
-
-		// if (fabsf(_u[2]) > MIN_VALID_COMMAND) {
-		// 	pwm_2  = _u[2] * 1000.f + 1600.f;
-		// 	delPWM_2 = math::constrain(pwm_2, 1000.f, 2000.f);
-		// 	delPWM_2 = delPWM_2 - 1600.f;
-		// }
-
-		// if (fabsf(_u[3]) > MIN_VALID_COMMAND) {
-		// 	pwm_3  = _u[3] * 1000.f + 1600.f;
-		// 	delPWM_3 = math::constrain(pwm_3, 1000.f, 2000.f);
-		// 	delPWM_3 = delPWM_3 - 1600.f;
-		// }
-
 		// Scale and constrain only if input signal is significant
 		if (fabsf(_u[0]) > MIN_VALID_COMMAND) {
 			pwm_0 = _u[0] * 500.f + 1500.f;
-			delPWM_0 = math::constrain(pwm_0, 1000.f, 2000.f);
-			delPWM_0 = delPWM_0 - 1400.f;
+			pwm_0 = math::constrain(pwm_0, 1000.f, 2000.f);
+			delPWM_0 = pwm_0 - 1600.f;
 		}
 
 		if (fabsf(_u[1]) > MIN_VALID_COMMAND) {
 			pwm_1 = _u[1] * 500.f + 1500.f;
-			delPWM_1 = math::constrain(pwm_1, 1000.f, 2000.f);
-			delPWM_1 = delPWM_1 - 1400.f;
+			pwm_1 = math::constrain(pwm_1, 1000.f, 2000.f);
+			delPWM_1 = pwm_1 - 1600.f;
+
 		}
 
 		if (fabsf(_u[2]) > MIN_VALID_COMMAND) {
 			pwm_2 = _u[2] * 200.f + 1500.f;
-			delPWM_2 = math::constrain(pwm_2, 1300.f, 1700.f);
-			delPWM_2 = delPWM_2 - 1500.f;
+			pwm_2 = math::constrain(pwm_2, 1300.f, 1700.f);
+			delPWM_2 = pwm_2 - 1500.f;
+			if (fabsf(delPWM_2) < 1e-6f) {
+				delPWM_2 = 0.f;
+			}
 		}
 
 		if (fabsf(_u[3]) > MIN_VALID_COMMAND) {
 			pwm_3 = _u[3] * 200.f + 1500.f;
-			delPWM_3 = math::constrain(pwm_3, 1300.f, 1700.f);
-			delPWM_3 = delPWM_3 - 1500.f;
+			pwm_3 = math::constrain(pwm_3, 1300.f, 1700.f);
+			delPWM_3 = pwm_3 - 1500.f;
+			if (fabsf(delPWM_3) < 1e-6f) {
+				delPWM_3 = 0.f;
+			}
 		}
 
-	
+
 		float pwm_arr[actuator_outputs_s::NUM_ACTUATOR_OUTPUTS] = {pwm_0, pwm_1, pwm_2, pwm_3};
 		float delPWM_arr[actuator_outputs_s::NUM_ACTUATOR_OUTPUTS] = {delPWM_0, delPWM_1, delPWM_2, delPWM_3};
 
@@ -492,7 +473,7 @@ void Sih::generate_force_and_torques()
 		_T_B = Vector3f(
     		Fx_per_S1 * delPWM_2 * 1.f + Fx_per_S2 * delPWM_3 * 1.f,
     		Fy_per_S1 * delPWM_2 * 1.f + Fy_per_S2 * delPWM_3 * 1.f,
-    		Fz_per_UR * delPWM_0 * 1.f + Fz_per_LR * delPWM_1 * 1.f  + Fz_per_S1 * delPWM_2 * 1.f + Fz_per_S2 * delPWM_3 * 1.f - 0.942f
+    		Fz_per_UR * delPWM_0 * 1.f + Fz_per_LR * delPWM_1 * 1.f  + Fz_per_S1 * delPWM_2 * 1.f + Fz_per_S2 * delPWM_3 * 1.f - 9.2448f
 		);
 
 		_Mt_B = Vector3f(

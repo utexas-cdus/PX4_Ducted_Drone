@@ -253,7 +253,7 @@ param set-default CA_ROTOR1_PY 0.00
 
 
 # SIMULATION COMMANDS
-param set-default MIS_TAKEOFF_ALT 2.5
+param set-default MIS_TAKEOFF_ALT 5
 
 
 
